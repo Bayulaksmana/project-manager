@@ -1,0 +1,29 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "Back End for multiple login and routing project",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js",
+    "dev": "node --watch index.js"
+  },
+  "author": "Moyokapit-Project",
+  "license": "ISC",
+  "dependencies": {
+    "@arcjet/inspect": "^1.0.0-beta.11",
+    "@arcjet/node": "^1.0.0-beta.11",
+    "@sendgrid/mail": "^8.1.5",
+    "bcrypt": "^6.0.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.2",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.18.0",
+    "morgan": "^1.10.1",
+    "nodemon": "^3.1.10",
+    "zod": "^3.25.76",
+    "zod-express-middleware": "^1.4.0"
+  }
+}
