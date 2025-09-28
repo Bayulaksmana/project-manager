@@ -1,4 +1,4 @@
-import Loading from "@/components/loader";
+import { WorkspaceAvatar } from "@/components/dashboard/workspace-component";
 import { Button } from "@/components/ui/button";
 import {
     Card,
@@ -7,7 +7,7 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
-import { WorkspaceAvatar } from "@/components/workspace/workspace-component";
+import Loading from "@/components/utils/loader";
 import {
     useAcceptGenerateInviteMutation,
     useAcceptInviteByTokenMutation,

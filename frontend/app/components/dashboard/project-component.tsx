@@ -1,5 +1,4 @@
 import { ProjectStatus, RandomColors, type CreateProjectDialogProps, type MemberProps, type Project, type ProjectCardProps, type ProjectListProps } from "@/types"
-import { NoDataFound } from "../no-data-found"
 import { Link } from "react-router"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card"
 import { cn } from "@/lib/utils"
@@ -25,6 +24,7 @@ import { Calendar } from "../ui/calendar"
 import { Checkbox } from "../ui/checkbox"
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 import { Separator } from "../ui/separator"
+import { NoDataFound } from "../utils/no-data-found"
 
 export const ProjectList = ({ workspaceId, projects, onCreateProject }: ProjectListProps) => {
     return (

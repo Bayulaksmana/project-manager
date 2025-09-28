@@ -1,5 +1,5 @@
 import { CircleFadingPlus, LayoutGrid } from "lucide-react"
-import { Button } from "./ui/button"
+import { Button } from "../ui/button"
 
 interface NoDataFoundProps {
     title: string,

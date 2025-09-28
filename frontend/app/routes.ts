@@ -1,8 +1,10 @@
 import { type RouteConfig, index, layout, route } from "@react-router/dev/routes";
 
 export default [
-    layout("routes/auth/auth-layout.tsx", [
+    layout("routes/root/homepage-layout.tsx", [
         index("routes/root/home.tsx"),
+    ]),
+    layout("routes/auth/auth-layout.tsx", [
         route("sign-in", "routes/auth/sign-in.tsx"),
         route("sign-up", "routes/auth/sign-up.tsx"),
         route("forgot-password", "routes/auth/forgot-password.tsx"),
@@ -20,7 +22,7 @@ export default [
         route("workspaces/:workspaceId/projects/:projectId/tasks/:taskId", "routes/dashboard/task/index.tsx"),
         route("members", "routes/dashboard/members/index.tsx"),
         // layout("routes/user/user-layout.tsx", [
-            route("/profile", "routes/user/profile.tsx")
+        route("/profile", "routes/user/profile.tsx")
         // ]),
     ]),
 

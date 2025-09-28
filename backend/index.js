@@ -15,7 +15,7 @@ server.use(cors({
 }))
 server.use(morgan("dev"))
 mongoose
-    .connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+    .connect(process.env.MONGODB_URI)
     .then(() => console.log("Akses ke database sukses.✅ on MonggoDB Cluster"))
     .catch((err) => console.log("Akses ke database Error. ❌ on server lines 18 DB:", err))
 server.use(express.json())

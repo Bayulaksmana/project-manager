@@ -8,6 +8,7 @@
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 
+
 @font-face {
   font-family: 'Cabella';
   src: url('/cabella/Cabella.ttf') format('truetype');
@@ -15,11 +16,21 @@
 
 html,
 body {
+  background-color: #e6e6ff;
   @apply bg-white dark:bg-gray-950;
 
   @media (prefers-color-scheme: dark) {
     color-scheme: dark;
   }
+  font-family: "Montserrat",
+  sans-serif,
+  'Franklin Gothic Medium',
+  'Arial Narrow',
+  Arial;
+}
+
+.animatedButton {
+  animation-duration: 20000ms;
 }
 
 @theme inline {

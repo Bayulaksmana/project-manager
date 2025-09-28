@@ -4,7 +4,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui
 import { CalendarClock, Copy, CopyCheckIcon, MailsIcon, Plus, Send, UserPlus, UserStarIcon } from "lucide-react"
 import { format } from "date-fns"
 import { id } from "date-fns/locale"
-import { BackButton } from "../back-button"
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 import { Button } from "../ui/button"
 import { inviteMemberSchema, workspaceSchema } from "@/lib/schema"
@@ -23,6 +22,7 @@ import { Separator } from "../ui/separator"
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs"
 import { Label } from "../ui/label"
+import { BackButton } from "../utils/back-button"
 
 
 export const WorkspaceAvatar = ({ color, name, className }: { color: string, name: string, className: string }) => {

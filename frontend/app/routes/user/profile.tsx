@@ -1,4 +1,3 @@
-import { BackButton } from "@/components/back-button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -20,6 +19,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
+import { BackButton } from "@/components/utils/back-button";
 import { useChangePassword, useUpdateUserProfile, useUserProfileQuery } from "@/hooks/use-user";
 import { changePasswordSchema, profileSchema } from "@/lib/schema";
 import { useAuth } from "@/providers/auth-context";

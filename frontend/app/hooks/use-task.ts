@@ -16,7 +16,7 @@ export const useCreateTaskMutation = () => {
         }
     })
 }
-export const useTaskByIdQuery = (taskId: string) => {
+export const useTaskByIdQuery = (taskId?: string) => {
     return useQuery({
         queryKey: ["task", taskId],
         queryFn: () => fetchData(`/tasks/${taskId}`),

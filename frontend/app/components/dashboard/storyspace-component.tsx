@@ -13,11 +13,11 @@ import { toast } from "sonner"
 import { useNavigate } from "react-router"
 import { useCreateStory } from "@/hooks/use-storypace"
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card"
-import Image from "../image"
 import { format } from "date-fns"
 import { id } from "date-fns/locale"
 import { BookOpenCheckIcon, CalendarClock } from "lucide-react"
 import type { Storyspace } from "@/types"
+import Image from "../utils/image"
 
 interface CreateStoryspaceProps {
     isCreatingStoryspace: boolean

@@ -1,4 +1,3 @@
-import Loading from "@/components/loader";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -10,6 +9,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import Loading from "@/components/utils/loader";
 import { useGetWorkspaceDetailsQuery } from "@/hooks/use-workspace";
 import type { Task, Workspace } from "@/types";
 import React, { useEffect, useState } from "react";

@@ -1,12 +1,9 @@
 import { RecentProjects, StatisticsCharts, StatsCard, UpcomingTasks } from "@/components/dashboard/dashboard-component";
-import Loading from "@/components/loader"
-import { NoDataFound } from "@/components/no-data-found";
-import { Button } from "@/components/ui/button";
-import { DropdownMenu, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { Popover } from "@/components/ui/popover";
+import Loading from "@/components/utils/loader";
+import { NoDataFound } from "@/components/utils/no-data-found";
 import { useGetWorkspaceStatsQuery } from "@/hooks/use-workspace";
 import type { Project, ProjectStatusData, StatsCardProps, Task, TaskPriorityData, TaskTrendsData, WorkspaceProductivityData } from "@/types";
-import { useParams, useSearchParams } from "react-router";
+import { useSearchParams } from "react-router";
 
 const Dashboard = () => {
     const [searchParams] = useSearchParams();
@@ -18,7 +15,7 @@ const Dashboard = () => {
             buttonAction={() => { }}
         />
     }
-    const { data, isPending } = useGetWorkspaceStatsQuery(workspaceId ?? "") as {
+    const { data, isPending } = useGetWorkspaceStatsQuery(workspaceId) as {
         data: {
             stats: StatsCardProps;
             taskTrendsData: TaskTrendsData[];

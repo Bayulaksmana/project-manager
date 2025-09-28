@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router"
-import { Button } from "./ui/button"
 import { CornerUpLeftIcon } from "lucide-react"
+import { Button } from "../ui/button"
 
 export const BackButton = () => {
     const navigate = useNavigate()

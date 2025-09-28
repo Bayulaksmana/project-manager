@@ -1,11 +1,11 @@
-import { NoDataFound } from '@/components/no-data-found'
+import { CreateWorkspace, WorkspaceCard } from '@/components/dashboard/workspace-component'
 import { Button } from '@/components/ui/button'
+import Loading from '@/components/utils/loader'
+import { NoDataFound } from '@/components/utils/no-data-found'
 import { useGetWorkspacesQuery } from '@/hooks/use-workspace'
 import type { Workspace } from '@/types'
 import { CopyPlus } from 'lucide-react'
 import React, { useState } from 'react'
-import Loading from '@/components/loader'
-import { CreateWorkspace, WorkspaceCard } from '@/components/workspace/workspace-component'
 
 const Workspaces = () => {
     const [isCreatingWorkspace, setIsCreatingWorkspace] = useState(false)
