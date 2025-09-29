@@ -11,7 +11,6 @@ export default [
         route("reset-password", "routes/auth/reset-password.tsx"),
         route("verify-email", "routes/auth/verify-email.tsx"),
     ]),
-
     layout("routes/dashboard/dashboard-layout.tsx", [
         route("dashboard", "routes/dashboard/index.tsx"),
         route("workspaces", "routes/dashboard/workspaces/index.tsx"),
@@ -21,9 +20,7 @@ export default [
         route("workspaces/:workspaceId/projects/:projectId", "routes/dashboard/project/index.tsx"),
         route("workspaces/:workspaceId/projects/:projectId/tasks/:taskId", "routes/dashboard/task/index.tsx"),
         route("members", "routes/dashboard/members/index.tsx"),
-        // layout("routes/user/user-layout.tsx", [
         route("/profile", "routes/user/profile.tsx")
-        // ]),
     ]),
 
     route("workspace-invite/:workspaceId", "routes/dashboard/workspaces/workspace-invite.tsx"),

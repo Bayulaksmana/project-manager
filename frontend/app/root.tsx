@@ -2,8 +2,6 @@ import { isRouteErrorResponse, Links, Meta, Outlet, Scripts, ScrollRestoration, 
 import type { Route } from "./+types/root";
 import "./app.css";
 import ReactQueryProvider from "./providers/react-query-provider";
-import { StrictMode } from "react";
-import { Toaster } from "sonner";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -17,7 +15,6 @@ export const links: Route.LinksFunction = () => [
     href: "https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap",
   },
 ];
-
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
@@ -35,18 +32,13 @@ export function Layout({ children }: { children: React.ReactNode }) {
     </html>
   );
 }
-
 export default function App() {
   return (
-    <StrictMode>
       <ReactQueryProvider>
         <Outlet />
-        <Toaster position="top-right" />
       </ReactQueryProvider>
-    </StrictMode>
   )
 }
-
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
   let message = "RELOAD PAGE NOW!!";
   let details = "An unexpected error occurred.";

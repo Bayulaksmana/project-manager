@@ -14,7 +14,7 @@ const Image = ({ src, className, alt, w, h }: ImageProps) => {
             path={src}
             className={className}
             loading="lazy"
-            lqip={{ active: true, quality: 90, blur: 0, threshold: 10 }}
+            lqip={{ active: true, quality: 90, blur: 0, threshold: 30 }}
             alt={alt}
             width={w}
             height={h}

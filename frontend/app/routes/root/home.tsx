@@ -3,7 +3,7 @@ import type { Route } from '../../+types/root'
 import Noted from '@/components/utils/title-cilik'
 import { Separator } from '@/components/ui/separator'
 import { Button } from '@/components/ui/button'
-import Image from '@/components/utils/image'
+import { Carousel } from '@/components/home/homepage-component'
 
 export function meta({ }: Route.MetaArgs) {
   return [
@@ -13,16 +13,16 @@ export function meta({ }: Route.MetaArgs) {
 }
 const Homepage = () => {
   return (
-    <div className="flex flex-col md:gap-4 md:px-8">
-      <Noted title='Home' link='/' page='Landing Page' />
-      <div className="flex items-center justify-between gap-4">
+    <div className="flex flex-col md:px-8">
+      <Noted title='Home' link='/' page='Landing Page' className='text-emerald-600' />
+      <div className="flex items-center justify-between">
         <div className="">
           <h1 className="text-gray-800 text-2xl text-center sm:text-justify md:text-left md:text-3xl lg:text-4xl font-bold tracking-wide">
             Keluarga Pelajar Mahasiswa Indonesia Bolaang Mongondow Raya (KPMIBM-R)
-            <span className="italic text-sm md:text-xl text-center"> ~ Mototompiaan, Mototabian, bo Mototanoban</span>
+            <span className="italic text-sm md:text-xl text-center hover:underline"> ~ Mototompiaan, Mototabian, bo Mototanoban</span>
           </h1>
         </div>
-        <Link to="/sign-in" className="hidden md:flex relative">
+        <Link to="/sign-in" className="hidden md:flex relative ">
           <svg
             viewBox="0 0 200 200"
             width="150"
@@ -35,12 +35,15 @@ const Homepage = () => {
               <textPath href="#circlePath" startOffset="0%">Write your story •</textPath>
             </text>
           </svg>
-          <Button type="button" variant={"ghost"} className="absolute top-0 left-0 right-0 bottom-0 m-auto w-25 h-25 rounded-full flex items-center justify-center">
-            <Image src="/logo/logo-utama-besar.png" alt="Logo create cerita" className='w-35' w={35} h={35} />
+          <Button type="button" variant={"ghost"} className="absolute top-0 left-0 right-0 bottom-0 m-auto w-25 h-25 rounded-full flex items-center justify-center hover:bg-emerald-50">
+            <img src="/logo/logo-utama-besar.png" alt="Logo create cerita" className='' />
           </Button>
         </Link>
       </div>
-        <Separator/>
+      <Separator />
+      <div className="bg-card shadow-2xl w-full items-center justify-center flex">
+        <Carousel />
+      </div>
     </div>
   )
 }

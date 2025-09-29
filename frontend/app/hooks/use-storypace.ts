@@ -1,4 +1,4 @@
-import type { StoryspaceForm } from "@/components/storyspace/storyspace-component"
+import type { StoryspaceForm } from "@/components/dashboard/storyspace-component"
 import { fetchData, postData } from "@/lib/fetch-utils"
 import { useMutation, useQuery } from "@tanstack/react-query"
 
@@ -7,7 +7,6 @@ export const useCreateStory = () => {
         mutationFn: async (data: StoryspaceForm) => postData("/writespaces", data)
     })
 }
-
 export const useGetStoryspaceQuery = () => {
     return useQuery({
         queryKey: ["storyspaces"],

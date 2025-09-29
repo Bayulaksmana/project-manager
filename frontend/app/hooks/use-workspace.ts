@@ -1,4 +1,4 @@
-import type { WorkspaceForm } from "@/components/workspace/workspace-component"
+import type { WorkspaceForm } from "@/components/dashboard/workspace-component"
 import { fetchData, postData } from "@/lib/fetch-utils"
 import { useMutation, useQuery } from "@tanstack/react-query"
 

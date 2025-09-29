@@ -35,7 +35,7 @@ const SignUp = () => {
                 navigate("/sign-in")
             },
             onError: (error: any) => {
-                const errorMessage = error.response?.data?.message || "Erorr pada bagian Sign-Up.tsx"
+                const errorMessage = error.response?.data?.message
                 toast.error(errorMessage)
             }
         })

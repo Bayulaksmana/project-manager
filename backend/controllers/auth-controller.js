@@ -4,22 +4,25 @@ import jwt from "jsonwebtoken"
 import Verification from "../models/verification.js"
 import { sendEmail } from "../libs/send-email.js"
 import aj from "../libs/arcjet.js"
+import ArcjetLog from "../models/arcjet-log.js"
 
 const registerUser = async (req, res) => {
     try {
         const { email, name, password } = req.body
-        const decision = await aj.protect(req, { email, requested: 1 });
-        console.log("Arcjet decision", decision);
-        if (decision.isDenied()) {
-            res.writeHead(403, { "Content-Type": "application/json" });
-            return res.end(JSON.stringify({ message: "Invalid email address" }));
+        // const { email, name, password, profilePicture, bio, adminAccessToken } = req.body
+        const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/; // regex for email
+        const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/; // regex for password
+        if (!emailRegex.test(email)) {
+            return res.status(403).json({ message: "E-mail is invalid format, must be @email.com" })
         }
+        if (!passwordRegex.test(password)) {
+            return res.status(403).json({ message: "Password should be 6 to 20 character long with a numeric, 1 lowercase, 1 uppercase letters" })
+        }
+        const decision = await aj.protect(req, { email, requested: 1 }, { ...req, ip: req.ip || "127.0.0.1" },);
+        await ArcjetLog.create({ email, requested: 1, decision });
+        if (decision.isDenied()) { res.writeHead(403, { "Content-Type": "application/json" }); return res.end(JSON.stringify({ message: "Invalid email address, Please try again!" })); }
         const existingUser = await User.findOne({ email })
-        if (existingUser) {
-            return res.status(400).json({
-                message: "Email sudah terdaftar, gunakan email yang lain!"
-            })
-        }
+        if (existingUser) { return res.status(400).json({ message: "Email sudah terdaftar, gunakan email yang lain!" }) }
         const salt = await bcrypt.genSalt(10)
         const hashPassword = await bcrypt.hash(password, salt)
         const newUser = await User.create({
@@ -27,7 +30,7 @@ const registerUser = async (req, res) => {
             password: hashPassword,
             name
         })
-        // Popup notif kirim ke email 
+        // Popup notif kirim ke email
         const verificationToken = jwt.sign(
             { userId: newUser._id, purpose: "email-verification" },
             process.env.JWT_SECRET,
@@ -86,7 +89,7 @@ const registerUser = async (req, res) => {
             })
         }
         return res.status(201).json({
-            message: "Tautan telah di kirim ke alamat email, silahkan verifikasi akun anda."
+            message: "Tautan telah di kirim ke alamat email, silahkan verifikasi akun anda.", decision
         })
     } catch (error) {
         return res.status(500).json({ message: "Internal server mengalami kegaduhan di auth-controller fungsi registerUser", error })

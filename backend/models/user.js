@@ -10,6 +10,8 @@ const userSchema = new Schema({
     is2FAEnabled: { type: Boolean, default: false },
     twoFAOtp: { type: String, select: false },
     twoFAOtpExpired: { type: Date, select: false },
+    bio: { type: String, default: "" },
+    role: { type: String, enum: ["admin", "member", "owner", "viewer"], default: "member" },
 }, {
     timestamps: true
 })

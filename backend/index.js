@@ -4,6 +4,7 @@ import express from "express"
 import mongoose from "mongoose"
 import morgan from "morgan"
 import routes from "./routes/index.js"
+import connectDB from "./config/db-connect.js"
 
 dotenv.config()
 const server = express()
@@ -14,18 +15,13 @@ server.use(cors({
     allowedHeaders: ["Content-Type", "Authorization"],
 }))
 server.use(morgan("dev"))
-mongoose
-    .connect(process.env.MONGODB_URI)
-    .then(() => console.log("Akses ke database sukses.✅ on MonggoDB Cluster"))
-    .catch((err) => console.log("Akses ke database Error. ❌ on server lines 18 DB:", err))
+connectDB()
 server.use(express.json())
 const PORT = process.env.PORT
 
 server.get("/", async (req, res) => {
     try {
-        res.status(200).json({
-            message: "Dega Nion Don Moyokapit Project API",
-        })
+        res.status(200).json({ message: "Dega Nion Don Moyokapit Project API", })
     } catch (error) {
         res.status(500).json({
             message: "Terjadi masalah di server, harap periksa segera!",
@@ -35,7 +31,7 @@ server.get("/", async (req, res) => {
 })
 
 server.use("/api-v1", routes)
-
+server.use("/uploads", express.static("uploads"))
 // error middleware
 server.use((err, req, res, next) => {
     console.log(err.stack)

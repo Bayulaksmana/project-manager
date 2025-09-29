@@ -1,4 +1,4 @@
-import type { CreateTaskFormData } from '@/components/taks/task-component';
+import type { CreateTaskFormData } from '@/components/dashboard/task-component';
 import { fetchData, postData, updateData } from '@/lib/fetch-utils';
 import type { TaskPriority, TaskStatus } from '@/types';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';

@@ -1,8 +1,8 @@
 import { useAuth } from "@/providers/auth-context"
 import { RandomColors, type HeaderProps, type SidebarNavProps, type Workspace } from "@/types"
 import { Button } from "../ui/button"
-import { BadgeCheck, Bell, CircleCheckIcon, CircleHelpIcon, CircleIcon, FileArchive, FileChartPieIcon, InfoIcon, LayoutDashboard, ListTodo, LogInIcon, LogOut, PlusCircle, Settings2, UserLock, UserRoundCogIcon, Users, WorkflowIcon } from "lucide-react"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu"
+import { BadgeCheck, Bell, CircleCheckIcon, CircleHelpIcon, CircleIcon, FileArchive, FileChartPieIcon, InfoIcon, LayoutDashboard, ListIcon, ListTodo, LogInIcon, LogOut, LucideTabletSmartphone, PlusCircle, Search, Settings2, UserLock, UserRoundCogIcon, Users, WorkflowIcon } from "lucide-react"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuPortal, DropdownMenuSeparator, DropdownMenuShortcut, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuTrigger } from "../ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 import { Link, useLoaderData, useLocation, useNavigate } from "react-router"
 import React, { useState } from "react"
@@ -11,6 +11,10 @@ import { ScrollArea } from "../ui/scroll-area"
 import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger, navigationMenuTriggerStyle } from "../ui/navigation-menu"
 import { WorkspaceAvatar } from "./workspace-component"
 import Image from "../utils/image"
+import { Input } from "../ui/input"
+import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip"
+import { Sheet, SheetContent, SheetFooter, SheetHeader, SheetTitle } from "../ui/sheet"
+import { Separator } from "../ui/separator"
 
 
 const Header = ({ onWorkspaceSelected, selectedWorkspace, onCreateWorkspace }: HeaderProps) => {
@@ -212,7 +216,20 @@ const SideNav = ({ items, isCollapsed, className, currentWorkspace, ...props }: 
 }
 
 const NavigationHomepage = () => {
-    const { isAuthenticated, isLoading } = useAuth()
+    const [openSearchBar, setOpenSearchBar] = useState(false)
+    const [open, setOpen] = useState(false);
+
+    interface NavLink {
+        to: string;
+        label: string;
+    }
+    const navLinks: NavLink[] = [
+        { to: "/", label: "Home" },
+        { to: "/about", label: "About" },
+        { to: "/services", label: "Services" },
+        { to: "/contact", label: "Contact" },
+    ];
+
     const navMenuProps: { title: string; href: string; description: string }[] = [
         {
             title: "Alert Dialog",
@@ -250,35 +267,6 @@ const NavigationHomepage = () => {
                 "A popup that displays information related to an element when the element receives keyboard focus or the mouse hovers over it.",
         },
     ]
-    const MenuItem = ({ title, className, subTitle, href, children, ...props }: React.ComponentPropsWithoutRef<"ul"> & { href: string, subTitle: string }) => {
-        return (
-            <ul{...props}>
-                <NavigationMenuItem>
-                    <NavigationMenuTrigger className="text-lg">{title}</NavigationMenuTrigger>
-                    <NavigationMenuContent>
-                        <ul className="grid gap-2 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
-                            <li className="row-span-3">
-                                <NavigationMenuLink asChild>
-                                    <a
-                                        className="from-muted/50 to-muted flex h-full w-full flex-col justify-end rounded-md bg-linear-to-b p-6 no-underline outline-hidden select-none focus:shadow-md"
-                                        href={href}
-                                    >
-                                        <div className="mt-4 mb-2 text-lg font-medium">
-                                            {subTitle}
-                                        </div>
-                                        <p className="text-muted-foreground text-sm leading-tight">
-                                            {children}
-                                        </p>
-                                    </a>
-                                </NavigationMenuLink>
-                            </li>
-                        </ul>
-                    </NavigationMenuContent>
-                </NavigationMenuItem>
-            </ul>
-        )
-    }
-
     const ListItem = ({ title, children, href, ...props }: React.ComponentPropsWithoutRef<"li"> & { href: string }) => {
         return (
             <li {...props}>
@@ -294,7 +282,7 @@ const NavigationHomepage = () => {
         )
     }
     return (
-        <div className="flex justify-between -ml-2 md:ml-0 md:mr-10 py-4">
+        <div className="flex justify-between items-center -ml-2 md:ml-0 md:mr-2 py-4 z-1">
             <Link to="/" className="transition-transform hover:scale-105">
                 <Image src="logo/logo.svg" alt={'logo svg'} w={32} h={32} className={'w-full h-16 object-contain hidden sm:block'} />
                 <Image src="logo/logo-utama-besar.jpg" alt={'logo svg'} w={50} h={50} className={' block sm:hidden'} />
@@ -433,6 +421,48 @@ const NavigationHomepage = () => {
                     </NavigationMenuItem>
                 </NavigationMenuList>
             </NavigationMenu>
+            {/* Mobile Navigation */}
+            <div className="flex items-center justify-center -mr-6 md:mr-0">
+                <Button variant={"ghost"} title="Search" onClick={() => setOpenSearchBar(true)} className="hover:text-emerald-600 hover:bg-sky-100 md:block hidden">
+                    <Search className="size-6 text-muted-foreground" />
+                </Button>
+                <button title="Side Bar" onClick={() => setOpen(true)} className="hover:text-emerald-600 mr-4 block md:hidden">
+                    {open
+                        ? (<LucideTabletSmartphone className="size-7 text-slate-700" />)
+                        : (<ListIcon className="size-7 text-slate-700" />)
+                    }
+                </button>
+            </div>
+            <Sheet open={open} onOpenChange={setOpen}>
+                <SheetContent
+                    side={"bottom"}
+                    className="bg-amber-50 p-6 flex flex-col justify-between"
+                >
+                    <SheetHeader>
+                        <SheetTitle className="text-2xl font-cabella -mx-4 -mb-4 italic">KPMIBM-R PC. Bandung</SheetTitle>
+                    </SheetHeader>
+                    <Separator />
+                    <div className="relative flex justify-between">
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+                        <Input className="pl-10 w-full" placeholder="Search now ..." />
+                    </div>
+                    <div className="flex flex-col gap-4 text-lg font-medium">
+                        {navLinks.map((link) => (
+                            <Link
+                                key={link.to}
+                                to={link.to}
+                                className="hover:bg-emerald-600 transition-colors wfull p-1 rounded text-center hover:text-white"
+                                onClick={() => setOpen(false)}
+                            >
+                                {link.label}
+                            </Link>
+                        ))}
+                    </div>
+                    <SheetFooter className="mt-8 border-t -mb-6 pt-4 text-xs text-center text-gray-600 flex flex-col gap-1">
+                        <span >Moyokapit © 2025. All rights reserved.</span>
+                    </SheetFooter>
+                </SheetContent>
+            </Sheet>
         </div>
     )
 }

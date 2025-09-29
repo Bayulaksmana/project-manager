@@ -27,6 +27,20 @@ export interface Workspace {
     createdAt: Date,
     updateAt: Date,
 }
+
+
+export interface Carousel {
+    _id: string,
+    user: User,
+    img: string,
+    title: string,
+    total: number,
+    description: string,
+    website: string,
+    createdAt: Date,
+    updateAt: Date,
+}
+
 export interface Storyspace {
     _id: string,
     user: User
