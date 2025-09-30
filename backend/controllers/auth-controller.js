@@ -6,30 +6,51 @@ import { sendEmail } from "../libs/send-email.js"
 import aj from "../libs/arcjet.js"
 import ArcjetLog from "../models/arcjet-log.js"
 
+
+const generateToken = (userId) => {
+    return jwt.sign({ id: userId }, process.env.JWT_SECRET, { expiresIn: "7d" })
+}
 const registerUser = async (req, res) => {
     try {
-        const { email, name, password } = req.body
-        // const { email, name, password, profilePicture, bio, adminAccessToken } = req.body
-        const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/; // regex for email
-        const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/; // regex for password
-        if (!emailRegex.test(email)) {
-            return res.status(403).json({ message: "E-mail is invalid format, must be @email.com" })
-        }
-        if (!passwordRegex.test(password)) {
-            return res.status(403).json({ message: "Password should be 6 to 20 character long with a numeric, 1 lowercase, 1 uppercase letters" })
-        }
-        const decision = await aj.protect(req, { email, requested: 1 }, { ...req, ip: req.ip || "127.0.0.1" },);
+        // const { email, name, password } = req.body
+        const { email, name, password, profilePicture, bio, adminAccessToken } = req.body
+        // const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/; // regex for email
+        // const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/; // regex for password
+        // if (!emailRegex.test(email)) {
+        //     return res.status(403).json({ message: "E-mail is invalid format, must be @email.com" })
+        // }
+        // if (!passwordRegex.test(password)) {
+        //     return res.status(403).json({ message: "Password should be 6 to 20 character long with a numeric, 1 lowercase, 1 uppercase letters" })
+        // }
+
+        const clientIp = req.headers["x-forwarded-for"]?.split(",")[0]?.trim() || req.ip || req.socket?.remoteAddress || "127.0.0.1";
+        const userAgent = req.headers["user-agent"] || "PostmanRuntime/7.45.0";
+        const decision = await aj.protect(
+            { email },
+            { requested: 1 }, //  { ...req, ip: req.ip },
+            { ip: clientIp, ua: userAgent, env: process.env.ARCJET_ENV || "development" }
+        );
+        console.log({ email, clientIp, userAgent });
         await ArcjetLog.create({ email, requested: 1, decision });
         if (decision.isDenied()) { res.writeHead(403, { "Content-Type": "application/json" }); return res.end(JSON.stringify({ message: "Invalid email address, Please try again!" })); }
+        if (decision.conclusion === "DENY") { return res.status(429).json({ error: "Terlalu ngetes mas! Kurang-Kurangin.." }); }
         const existingUser = await User.findOne({ email })
         if (existingUser) { return res.status(400).json({ message: "Email sudah terdaftar, gunakan email yang lain!" }) }
         const salt = await bcrypt.genSalt(10)
         const hashPassword = await bcrypt.hash(password, salt)
+        let role = "member";
+        if (adminAccessToken && adminAccessToken === process.env.ADMIN_ACCESS_TOKEN) {
+            role = "admin"
+        }
         const newUser = await User.create({
             email,
             password: hashPassword,
-            name
+            name,
+            profilePicture,
+            bio,
+            role,
         })
+        console.log(newUser);
         // Popup notif kirim ke email
         const verificationToken = jwt.sign(
             { userId: newUser._id, purpose: "email-verification" },
@@ -38,12 +59,11 @@ const registerUser = async (req, res) => {
         )
         await Verification.create({
             userId: newUser._id,
-            token: verificationToken,
+            token: verificationToken && generateToken(newUser._id),
             expiresAt: new Date(Date.now() + 1 * 60 * 60 * 1000)
         })
         // send email
         const verificationLink = `${process.env.FRONTEND_URL}/verify-email?token=${verificationToken}`
-        // const emailBody = `<p>Click <a href="${verificationLink}" classname="underline" >Here</a> to verify your email</p>`
         const emailBody = `
 <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eee; border-radius: 8px;">
     <!-- Logo -->
@@ -88,11 +108,20 @@ const registerUser = async (req, res) => {
                 message: "Gagal mengirim email verifikasi anda"
             })
         }
+
         return res.status(201).json({
-            message: "Tautan telah di kirim ke alamat email, silahkan verifikasi akun anda.", decision
+            message: "Tautan telah di kirim ke alamat email, silahkan verifikasi akun anda.",
+            _id: newUser._id,
+            name: newUser.name,
+            email: newUser.email,
+            profilePicture: newUser.profilePicture,
+            bio: newUser.bio,
+            role,
+            token: generateToken(newUser._id)
         })
     } catch (error) {
-        return res.status(500).json({ message: "Internal server mengalami kegaduhan di auth-controller fungsi registerUser", error })
+        console.log(error)
+        return res.status(500).json({ message: "Internal server mengalami kegaduhan di auth-controller fungsi registerUser" })
     }
 }
 const loginUser = async (req, res) => {

@@ -2,8 +2,8 @@ import mongoose, { Schema } from "mongoose"
 
 const postSchema = new Schema(
     {
-        user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
-        img: { type: String, default: null },
+        user: { type: mongoose.Schema.Types.ObjectId, ref: "User"},
+        imgUrl: { type: String, default: null },
         title: { type: String, required: true, },
         slug: { type: String, required: true, unique: true, },
         desc: { type: String, },
@@ -20,6 +20,8 @@ const postSchema = new Schema(
         comments: { type: Number, default: 0 },
         generatedImages: [{ type: String }],
         generatedByAI: { type: Boolean, default: false },
+        isDeleted: { type: Boolean, default: false },
+        deletedAt: { type: Date, default: null },
         members: [
             {
                 user: { type: Schema.Types.ObjectId, ref: "Kader" },

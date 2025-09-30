@@ -7,6 +7,7 @@ import taskRoutes from "./task.js"
 import userRoutes from "./user.js";
 import aiRoutes from "./gen-ai.js";
 import homeRoutes from "./home.js";
+import commentRoutes from "./comment.js";
 
 const router = express.Router()
 
@@ -18,6 +19,8 @@ router.use("/tasks", taskRoutes)
 router.use("/users", userRoutes);
 router.use("/homepage", homeRoutes);
 router.use("/ai", aiRoutes)
+router.use("/comment", commentRoutes)
+
 
 
 export default router

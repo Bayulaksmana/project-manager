@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button'
 import { Link, useNavigate } from 'react-router'
 import { useLoginMutation } from '@/hooks/use-auth'
 import { toast } from 'sonner'
-import { Loader2 } from 'lucide-react'
+import { Home, Loader2 } from 'lucide-react'
 import { useAuth } from '@/providers/auth-context'
 
 
@@ -42,6 +42,11 @@ const SignIn = () => {
     }
     return (
         <div className='min-h-screen flex flex-col items-center justify-center bg-muted/40 p-4'>
+            <Link to={"/"}>
+                <Button className='absolute left-2 top-2 hover:text-sky-600' variant='outline'>
+                    <Home /><span className='hidden md:block'>Homepage</span>
+                </Button>
+            </Link>
             <Card className='max-w-md w-full shadow-md'>
                 <CardHeader className='text-center justify-center items-center'>
                     <img src="/logo/logo-utama-hitam.png" alt="" width="250" />

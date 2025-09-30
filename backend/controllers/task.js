@@ -261,7 +261,7 @@ const watchTask = async (req, res) => {
         if (!project) { return res.status(404).json({ message: "Project tidak ditemukan" }) }
         const isMember = project.members.some((member) => member.user.toString() === req.user._id.toString())
         if (!isMember) { return res.status(404).json({ message: "Daftarkan akun member" }) }
-        
+
     } catch (error) {
         console.log(error)
         return res.status(500).json({ message: "Internal server mengalami kekacauan di backend controllers -> watchTask -> task.js" })

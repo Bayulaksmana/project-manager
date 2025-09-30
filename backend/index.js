@@ -1,13 +1,15 @@
 import cors from "cors"
 import dotenv from "dotenv"
 import express from "express"
-import mongoose from "mongoose"
 import morgan from "morgan"
 import routes from "./routes/index.js"
 import connectDB from "./config/db-connect.js"
+import path from "path";
+
 
 dotenv.config()
 const server = express()
+server.set("trust proxy", true);
 server.disable("etag")
 server.use(cors({
     origin: process.env.FRONTEND_URL,
@@ -29,9 +31,8 @@ server.get("/", async (req, res) => {
         })
     }
 })
-
+server.use("/uploads", express.static(path.resolve("uploads")))
 server.use("/api-v1", routes)
-server.use("/uploads", express.static("uploads"))
 // error middleware
 server.use((err, req, res, next) => {
     console.log(err.stack)
@@ -45,5 +46,9 @@ server.use((req, res) => {
 })
 
 server.listen(PORT, () => {
-    console.log(`Server is runing men ✅ on http://localhost:${PORT}`)
+    try {
+        console.log(`Server is runing men ✅ on http://localhost:${PORT}`)
+    } catch (error) {
+        console.log(error)
+    }
 })

@@ -4,7 +4,8 @@ const arcjetLogSchema = new mongoose.Schema({
     email: String,
     requested: Number,
     decision: Object,
-    createdAt: { type: Date, default: Date.now }
+}, {
+    timestamps: true
 });
 
 const ArcjetLog = mongoose.model("ArcjetLog", arcjetLogSchema);

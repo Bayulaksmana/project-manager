@@ -8,6 +8,12 @@ const activityLogSchema = new Schema({
             "created_task",
             "update_task",
             "completed_task",
+            "created_story",
+            "updated_story",
+            "deleted_story",
+            "created_comment",
+            "updated_comment",
+            "deleted_comment",
             "created_subtask",
             "update_subtask",
             "created_project",
@@ -25,7 +31,7 @@ const activityLogSchema = new Schema({
     },
     resourceType: {
         type: String, required: true,
-        enum: ["Task", "Project", "Workspace", "Comment", "Kader"]
+        enum: ["Task", "Project", "Workspace", "Comment", "Kader", "Attachment", "Storyspace"]
     },
     resourceId: { type: Schema.Types.ObjectId, required: true },
     details: { type: Object }

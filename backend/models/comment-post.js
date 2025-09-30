@@ -5,6 +5,9 @@ const commentSchema = new mongoose.Schema({
     author: { type: mongoose.Schema.Types.ObjectId, ref: "Kader", required: true },
     content: { type: String, required: true, trim: true },
     parentComment: { type: mongoose.Schema.Types.ObjectId, ref: "CommentPost", default: null },
+    sticker: { type: String, default: null }, // URL atau nama stiker
+    emoji: [{ type: String }], // array emoji (misalnya ["😂", "🔥"])
+    gif: { type: String, default: null }, // URL GIF
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now },
 },{
