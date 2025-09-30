@@ -1,8 +1,11 @@
 import express from "express";
-import { getAiData } from "../controllers/ai-controller.js";
+import { generateComment, generateStory, generateStoryPost, generateSummary } from "../controllers/ai-controller.js";
 
 const router = express.Router()
 
-router.get("/", getAiData)
+router.post("/generate", generateStory)
+router.post("/generate-story", generateStoryPost)
+router.post("/generate-reply", generateComment)
+router.post("/generate-summary", generateSummary)
 
 export default router
