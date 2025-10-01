@@ -33,6 +33,7 @@ const SignUp = () => {
             adminAccessToken: "",
         }
     })
+
     const { mutate, isPending } = useSignUpMutation()
     const handleClick = () => {
         fileInputRef.current?.click();
@@ -55,6 +56,8 @@ const SignUp = () => {
         }
         const imageUrl = await uploadImage(selectedFile) as { imageUrl: string }
         const payload = { ...value, profilePicture: imageUrl.imageUrl };
+        console.log(payload)
+        console.log(imageUrl)
         mutate(payload, {
             onSuccess: () => {
                 toast.success(`Akun berhasil didaftarkan dengan alamat email : ${value.email}`, {
@@ -76,22 +79,23 @@ const SignUp = () => {
             }}
         >
             <Link to={"/"}>
-                <Button className='absolute top-2 left-2 hover:text-sky-600' variant='outline'>
+                <Button className='absolute top-2 left-2 hover:text-sky-600 hover:-translate-y-1' variant='outline'>
                     <Home /><span className='hidden md:block'>Homepage</span>
                 </Button>
             </Link>
             <Card className='max-w-md w-full shadow-md'>
                 <CardHeader className='text-center items-center justify-center'>
                     {preview ? (
-                        <img
+                        <><img
                             src={preview}
                             alt="Preview"
-                            className="shadow-2xl mx-17 w-24 h-24 rounded-full object-cover border-4 border-emerald-300"
+                            className="shine-effect shadow-2xl mx-17 w-24 h-24 rounded-full object-cover border-4 border-emerald-300"
                             style={{ animation: "spin 15s linear infinite" }}
                         />
+                        </>
                     ) :
-                        <></>
-                        // <img src="/logo/logo-utama-hitam.png" alt="" width="250" />
+                        // <></>
+                        <img src="/logo/logo-utama-hitam.png" alt="" width="250" />
                     }
                     <CardTitle className='text-4xl font-cabella'>Dega Nion Don</CardTitle>
                     <CardDescription className='text-muted-foreground text-sm font-semibold'>Buat akun anggota KPMIBM-R</CardDescription>

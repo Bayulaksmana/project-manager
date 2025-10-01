@@ -12,7 +12,6 @@ const generateToken = (userId) => {
 }
 const registerUser = async (req, res) => {
     try {
-        // const { email, name, password } = req.body
         const { email, name, password, profilePicture, adminAccessToken } = req.body
         const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
         const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/;
@@ -27,7 +26,7 @@ const registerUser = async (req, res) => {
         const userAgent = req.headers["user-agent"] || "PostmanRuntime/7.45.0";
         const decision = await aj.protect(
             { email },
-            { requested: 1 }, //  { ...req, ip: req.ip },
+            { requested: 1 },
             { ip: clientIp, ua: userAgent, env: process.env.ARCJET_ENV || "development" }
         );
         await ArcjetLog.create({ email, requested: 1, decision });
@@ -58,7 +57,6 @@ const registerUser = async (req, res) => {
             token: verificationToken && generateToken(newUser._id),
             expiresAt: new Date(Date.now() + 1 * 60 * 60 * 1000)
         })
-        // send email
         const verificationLink = `${process.env.FRONTEND_URL}/verify-email?token=${verificationToken}`
         const emailBody = `
 <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eee; border-radius: 8px;">

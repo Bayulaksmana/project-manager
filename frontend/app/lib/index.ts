@@ -26,16 +26,6 @@ export const getProjectProgress = (tasks: { status: TaskStatus }[]) => {
     return progress
 }
 
-// export const uploadImage = async (imageFile: any) => {
-//     const formData = new FormData()
-//     formData.append('image', imageFile)
-//     try {
-//         await postData("/auth/upload-image", formData)
-//     } catch (error) {
-//         console.error("Error upload the image:", error)
-//         throw error
-//     }
-// }
 export const uploadImage = async (imageFile: File) => {
     const formData = new FormData()
     formData.append("image", imageFile)

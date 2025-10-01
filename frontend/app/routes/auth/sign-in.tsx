@@ -48,13 +48,13 @@ const SignIn = () => {
             }}
         >
             <Link to={"/"}>
-                <Button className='absolute left-2 top-2 hover:text-sky-600' variant='outline'>
-                    <Home /><span className='hidden md:block'>Homepage</span>
+                <Button className='absolute left-2 top-2 hover:text-sky-600 hover:-translate-y-1' variant='outline'>
+                    <Home /><span className='hidden md:block '>Homepage</span>
                 </Button>
             </Link>
             <Card className='max-w-md w-full shadow-md bg-cover bg-sky-50'>
                 <CardHeader className='text-center justify-center items-center'>
-                    {/* <img src="/logo/logo-utama-hitam.png" alt="" width="250" /> */}
+                    <img src="/logo/logo-utama-hitam.png" alt="" width="250" />
                     <CardTitle className='text-4xl font-cabella'>Dega Nion Don</CardTitle>
                     <CardDescription className='text-muted-foreground text-sm font-semibold'>Masuk dengan akun KPMIBM-R</CardDescription>
                 </CardHeader>
