@@ -13,15 +13,15 @@ const generateToken = (userId) => {
 const registerUser = async (req, res) => {
     try {
         // const { email, name, password } = req.body
-        const { email, name, password, profilePicture, bio, adminAccessToken } = req.body
-        // const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/; // regex for email
-        // const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/; // regex for password
-        // if (!emailRegex.test(email)) {
-        //     return res.status(403).json({ message: "E-mail is invalid format, must be @email.com" })
-        // }
-        // if (!passwordRegex.test(password)) {
-        //     return res.status(403).json({ message: "Password should be 6 to 20 character long with a numeric, 1 lowercase, 1 uppercase letters" })
-        // }
+        const { email, name, password, profilePicture, adminAccessToken } = req.body
+        const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+        const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/;
+        if (!emailRegex.test(email)) {
+            return res.status(403).json({ message: "E-mail is invalid format, must be @email.com" })
+        }
+        if (!passwordRegex.test(password)) {
+            return res.status(403).json({ message: "Password should be 6 to 20 character long with a numeric, 1 lowercase, 1 uppercase letters" })
+        }
 
         const clientIp = req.headers["x-forwarded-for"]?.split(",")[0]?.trim() || req.ip || req.socket?.remoteAddress || "127.0.0.1";
         const userAgent = req.headers["user-agent"] || "PostmanRuntime/7.45.0";
@@ -30,7 +30,6 @@ const registerUser = async (req, res) => {
             { requested: 1 }, //  { ...req, ip: req.ip },
             { ip: clientIp, ua: userAgent, env: process.env.ARCJET_ENV || "development" }
         );
-        console.log({ email, clientIp, userAgent });
         await ArcjetLog.create({ email, requested: 1, decision });
         if (decision.isDenied()) { res.writeHead(403, { "Content-Type": "application/json" }); return res.end(JSON.stringify({ message: "Invalid email address, Please try again!" })); }
         if (decision.conclusion === "DENY") { return res.status(429).json({ error: "Terlalu ngetes mas! Kurang-Kurangin.." }); }
@@ -47,11 +46,8 @@ const registerUser = async (req, res) => {
             password: hashPassword,
             name,
             profilePicture,
-            bio,
             role,
         })
-        console.log(newUser);
-        // Popup notif kirim ke email
         const verificationToken = jwt.sign(
             { userId: newUser._id, purpose: "email-verification" },
             process.env.JWT_SECRET,

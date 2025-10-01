@@ -1,4 +1,5 @@
 import type { ProjectStatus, TaskStatus } from "@/types"
+import { postData } from "./fetch-utils"
 
 export const publicRoutes = ["/sign-in", "/sign-up", "/verify-email", "/reset-password", "/forgot-password", "/"]
 export const getTaskStatusColor = (status: ProjectStatus) => {
@@ -23,4 +24,26 @@ export const getProjectProgress = (tasks: { status: TaskStatus }[]) => {
     const completedTasks = tasks.filter((task) => task?.status === "Done").length
     const progress = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0
     return progress
+}
+
+// export const uploadImage = async (imageFile: any) => {
+//     const formData = new FormData()
+//     formData.append('image', imageFile)
+//     try {
+//         await postData("/auth/upload-image", formData)
+//     } catch (error) {
+//         console.error("Error upload the image:", error)
+//         throw error
+//     }
+// }
+export const uploadImage = async (imageFile: File) => {
+    const formData = new FormData()
+    formData.append("image", imageFile)
+    try {
+        const res = await postData("/auth/upload-image", formData)
+        return res
+    } catch (error) {
+        console.error("Error upload the image:", error)
+        throw error
+    }
 }

@@ -11,6 +11,8 @@ export const signUpSchema = z.object({
     email: z.email("Email anda tidak sesuai formatnya loh!"),
     password: z.string().min(8, "Password must be at least 8 characters long"),
     confirmPassword: z.string().min(8, "Password must be at least 8 characters"),
+    profilePicture: z.string(),
+    adminAccessToken: z.string(),
 }).refine((data) => data.password === data.confirmPassword, {
     path: ["confirmPassword"],
     message: "Password do not match",

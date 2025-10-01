@@ -3,9 +3,10 @@ import axios from "axios"
 const BASE_URL = import.meta.env.VITE_API_URL
 const api = axios.create({
     baseURL: BASE_URL,
-    headers: {
-        "Content-Type": "application/json"
-    }
+    timeout:1000,
+    // headers: {
+    //     "Content-Type": "application/json"
+    // }
 })
 
 api.interceptors.request.use((config) => {
@@ -25,11 +26,13 @@ api.interceptors.response.use(
         return Promise.reject(error)
     })
 
-const postData = async <T>(url: string, data: unknown): Promise<T> => {
+const postData = async <T>(url: string, data: unknown, isJson = true): Promise<T> => {
+    const headers = isJson ? { "Content-Type": "application/json" } : undefined;
     const response = await api.post(url, data)
     return response.data
 }
-const updateData = async <T>(url: string, data: unknown): Promise<T> => {
+const updateData = async <T>(url: string, data: unknown, isJson = true): Promise<T> => {
+    const headers = isJson ? { "Content-Type": "application/json" } : undefined;
     const response = await api.put(url, data)
     return response.data
 }

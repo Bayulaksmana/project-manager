@@ -9,14 +9,16 @@ import { Button } from '@/components/ui/button'
 import { Link, useNavigate } from 'react-router'
 import { useLoginMutation } from '@/hooks/use-auth'
 import { toast } from 'sonner'
-import { Home, Loader2 } from 'lucide-react'
+import { Home, Loader2, LockKeyhole, LockKeyholeOpen } from 'lucide-react'
 import { useAuth } from '@/providers/auth-context'
+import { useState } from 'react'
 
 
 type SigninFormData = z.infer<typeof signInSchema>
 
 const SignIn = () => {
     const navigate = useNavigate()
+    const [show, setShow] = useState(false)
     const { login } = useAuth()
     const form = useForm<SigninFormData>({
         resolver: zodResolver(signInSchema),
@@ -30,7 +32,6 @@ const SignIn = () => {
         mutate(value, {
             onSuccess: (data) => {
                 login(data)
-                // console.log(data)
                 toast.success("Login Successfully -> Dashboard")
                 navigate("/dashboard")
             },
@@ -41,15 +42,19 @@ const SignIn = () => {
         })
     }
     return (
-        <div className='min-h-screen flex flex-col items-center justify-center bg-muted/40 p-4'>
+        <div className='min-h-screen bg-cover flex items-center justify-center bg-muted/40 p-4 opacity-95'
+            style={{
+                backgroundImage: "url('/image-tone.jpg')"
+            }}
+        >
             <Link to={"/"}>
                 <Button className='absolute left-2 top-2 hover:text-sky-600' variant='outline'>
                     <Home /><span className='hidden md:block'>Homepage</span>
                 </Button>
             </Link>
-            <Card className='max-w-md w-full shadow-md'>
+            <Card className='max-w-md w-full shadow-md bg-cover bg-sky-50'>
                 <CardHeader className='text-center justify-center items-center'>
-                    <img src="/logo/logo-utama-hitam.png" alt="" width="250" />
+                    {/* <img src="/logo/logo-utama-hitam.png" alt="" width="250" /> */}
                     <CardTitle className='text-4xl font-cabella'>Dega Nion Don</CardTitle>
                     <CardDescription className='text-muted-foreground text-sm font-semibold'>Masuk dengan akun KPMIBM-R</CardDescription>
                 </CardHeader>
@@ -74,12 +79,21 @@ const SignIn = () => {
                                         </Link>
                                     </div>
                                     <FormControl>
-                                        <Input type="password" placeholder="********" autoComplete='current-password' {...field} />
+                                        <div className="relative">
+                                            <Input type={show ? "text" : "password"} placeholder="********" autoComplete='current-password' {...field} />
+                                            <button
+                                                type="button"
+                                                onClick={() => setShow(!show)}
+                                                className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500 hover:text-gray-700"
+                                            >
+                                                {show ? <LockKeyhole size={18} className='text-red-400' /> : <LockKeyholeOpen size={18} className='text-emerald-400' />}
+                                            </button>
+                                        </div>
                                     </FormControl>
                                     <FormMessage className='text-xs' />
                                 </FormItem>
                             )} />
-                            <Button type='submit' className='w-full mt-2 hover:bg-emerald-600' disabled={isPending} >
+                            <Button type='submit' className='w-full mt-2 bg-linear-to-r from-emerald-800 to-emerald-400' disabled={isPending} >
                                 {isPending ? <Loader2 className='w-4 h-4 mr-1' /> : "Sign In"}
                             </Button>
                         </form>
