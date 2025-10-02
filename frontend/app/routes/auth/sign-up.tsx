@@ -2,12 +2,11 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { useSignUpMutation } from '@/hooks/use-auth'
-import { uploadImage } from '@/lib'
+import { uploadImage, useSignUpMutation } from '@/hooks/use-auth'
 import { signUpSchema } from '@/lib/schema'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Home, ImagePlusIcon, LockKeyhole, LockKeyholeOpen } from 'lucide-react'
-import { use, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { useForm, type SubmitHandler } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router'
 import { toast } from 'sonner'
@@ -15,7 +14,6 @@ import type z from 'zod'
 
 
 export type SignupFormData = z.infer<typeof signUpSchema>
-
 const SignUp = () => {
     const fileInputRef = useRef<HTMLInputElement | null>(null);
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -33,7 +31,6 @@ const SignUp = () => {
             adminAccessToken: "",
         }
     })
-
     const { mutate, isPending } = useSignUpMutation()
     const handleClick = () => {
         fileInputRef.current?.click();
@@ -56,8 +53,6 @@ const SignUp = () => {
         }
         const imageUrl = await uploadImage(selectedFile) as { imageUrl: string }
         const payload = { ...value, profilePicture: imageUrl.imageUrl };
-        console.log(payload)
-        console.log(imageUrl)
         mutate(payload, {
             onSuccess: () => {
                 toast.success(`Akun berhasil didaftarkan dengan alamat email : ${value.email}`, {
@@ -94,7 +89,6 @@ const SignUp = () => {
                         />
                         </>
                     ) :
-                        // <></>
                         <img src="/logo/logo-utama-hitam.png" alt="" width="250" />
                     }
                     <CardTitle className='text-4xl font-cabella'>Dega Nion Don</CardTitle>

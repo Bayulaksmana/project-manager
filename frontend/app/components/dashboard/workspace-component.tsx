@@ -23,6 +23,8 @@ import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs"
 import { Label } from "../ui/label"
 import { BackButton } from "../utils/back-button"
+import { Progress } from "../ui/progress"
+import { getProject } from "@/lib"
 
 
 export const WorkspaceAvatar = ({ color, name, className }: { color: string, name: string, className: string }) => {
@@ -35,15 +37,15 @@ export const WorkspaceAvatar = ({ color, name, className }: { color: string, nam
             <span className="text-xs font-medium text-white">
                 {name.charAt(0).toUpperCase()}
             </span>
-
         </div>
     )
 }
-export const WorkspaceHeader = ({ workspace, members, onCreateProject, onInviteMember }: WorkspaceHeaderProps) => {
+export const WorkspaceHeader = ({ workspace, members, onCreateProject, onInviteMember, projects }: WorkspaceHeaderProps) => {
+    const projectProgress = getProject(projects)
     return (
         <div className='space-y-8'>
             <div className="space-y-3">
-                <div className="flex flex-col-reverse md:flex-row md:justify-between md:items-center gap-3">
+                <div className="flex flex-col-reverse lg:flex-row lg:justify-between md:items-center gap-3">
                     <div className="flex items-center justify-center gap-2">
                         {workspace.color && (
                             <WorkspaceAvatar color={workspace.color} name={workspace.name} className='w-6 h-6 items-center justify-center flex rounded' />
@@ -58,10 +60,10 @@ export const WorkspaceHeader = ({ workspace, members, onCreateProject, onInviteM
                                     {members.map((member) => (
                                         <Avatar key={member._id}
                                             className='relative h-8 w-8 rounded-full border-b border-background overflow-hidden'
-                                            title={member.user.name}>
-                                            <AvatarImage src={member.user.profilePicture} alt={member.user.name} />
+                                            title={member.user?.name}>
+                                            <AvatarImage src={member.user?.profilePicture} alt={member.user?.name} />
                                             <AvatarFallback>
-                                                {member.user.name.charAt(0).toUpperCase()}
+                                                {member.user?.name.charAt(0).toUpperCase()}
                                             </AvatarFallback>
                                         </Avatar>
                                     ))}
@@ -72,8 +74,15 @@ export const WorkspaceHeader = ({ workspace, members, onCreateProject, onInviteM
                         <Button className='hover:bg-emerald-200 shadow-2xl text-xs' size={"sm"} variant={"outline"} onClick={onCreateProject}><Plus className='' /><span className="hidden sm:block">New Project</span></Button>
                         <BackButton />
                     </div>
+                    <div className="absolute space-y-1 flex right-10 mt-22 items-center justify-center gap-4">
+                        <div className="flex items-center gap-2 w-full">
+                            <span className="text-xs text-muted-foreground hidden lg:block">Progress:</span>
+                            <span className="flex-1 sm:w-sm hidden lg:block"><Progress value={projectProgress} className="h-2" /></span>
+                            <span className="text-xs text-muted-foreground hidden lg:block">{projectProgress}%</span>
+                        </div>
+                    </div>
                 </div>
-                {workspace.description && <p className='text-xs md:text-sm text-muted-foreground text-justify m-4'>{workspace.description}</p>}
+                {workspace.description && <p className='text-xs md:text-sm text-muted-foreground text-justify m-4 lg:w-3/5'>{workspace.description}</p>}
             </div>
         </div>
     )

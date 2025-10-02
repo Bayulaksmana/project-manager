@@ -26,6 +26,12 @@ export const useGetWorkspaceStatsQuery = (workspaceId: string) => {
         queryFn: async () => fetchData(`/workspaces/${workspaceId}/stats`),
     })
 };
+export const useGetDashboardSummaryQuery = () => {
+    return useQuery({
+        queryKey: ["dashboard"],
+        queryFn: async () => fetchData(`/dashboard`),
+    })
+};
 
 export const useGetWorkspaceDetailsQuery = (workspaceId: string) => {
     return useQuery({
@@ -54,3 +60,4 @@ export const useAcceptGenerateInviteMutation = () => {
             postData(`/workspaces/${workspaceId}/accept-generate-invite`, {}),
     });
 };
+

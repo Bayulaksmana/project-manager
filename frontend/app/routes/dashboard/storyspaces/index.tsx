@@ -25,9 +25,9 @@ const Storyspaces = () => {
                 </div>
                 <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                     {
-                        storyspaces.map((ss) => (
-                            <StoryspaceCard key={ss._id} storyspace={ss} />
-                        ))
+                        // storyspaces.map((ss) => (
+                        //     <StoryspaceCard key={ss._id} storyspace={ss} />
+                        // ))
                     }
                     {storyspaces.length === 0 && <NoDataFound title='Cerita anda tidak tersedia'
                         description='Tulis cerita terbaik anda disini'

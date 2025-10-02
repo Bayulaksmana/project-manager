@@ -4,7 +4,7 @@ const BASE_URL = import.meta.env.VITE_API_URL;
 
 const api = axios.create({
     baseURL: BASE_URL,
-    timeout: 15000,
+    timeout: 30000,
 });
 api.interceptors.request.use((config) => {
     const token = localStorage.getItem("token");
@@ -36,7 +36,12 @@ const request = async <T>(
     config: AxiosRequestConfig = {}
 ): Promise<T> => {
     try {
-        const headers = isJson ? { "Content-Type": "application/json" } : {};
+        const headers: Record<string, string> = {};
+        if (isJson) {
+            headers["Content-Type"] = "application/json";
+        }
+
+
         const response = await api.request<T>({
             method,
             url,
@@ -51,7 +56,10 @@ const request = async <T>(
     }
 };
 
-export const postData = <T>(url: string, data: unknown, isJson = false) =>
+export const postData = <T>(url: string, data: unknown, isJson = true) =>
+    request<T>("post", url, data, isJson);
+
+export const postData2 = <T>(url: string, data: unknown, isJson = true) =>
     request<T>("post", url, data, isJson);
 
 export const updateData = <T>(url: string, data: unknown, isJson = true) =>

@@ -103,7 +103,7 @@ const registerUser = async (req, res) => {
             })
         }
 
-        return res.status(201).json({
+        return res.status(200).json({
             message: "Tautan telah di kirim ke alamat email, silahkan verifikasi akun anda.",
             _id: newUser._id,
             name: newUser.name,
@@ -114,7 +114,6 @@ const registerUser = async (req, res) => {
             token: generateToken(newUser._id)
         })
     } catch (error) {
-        console.log(error)
         return res.status(500).json({ message: "Internal server mengalami kegaduhan di auth-controller fungsi registerUser" })
     }
 }
@@ -217,7 +216,9 @@ const verifyEmail = async (req, res) => {
 const resetPasswordRequest = async (req, res) => {
     try {
         const { email } = req.body
+        console.log(req.body)
         const user = await User.findOne({ email })
+        console.log(user)
         if (!user) {
             return res.status(400).json({ message: "User tidak ditemukan di dunia ini" })
         }
@@ -226,7 +227,7 @@ const resetPasswordRequest = async (req, res) => {
         }
         const existingVerification = await Verification.findOne({ userId: user._id })
         if (existingVerification && existingVerification.expiresAt > new Date()) {
-            return res.status(400).json({ message: "Reset password anda sudah dikirim via email." })
+            return res.status(400).json({ message: "Tunggu! email verifikasi sudah di kirim loh" })
         }
         if (existingVerification && existingVerification.expiresAt < new Date()) {
             await Verification.findByIdAndDelete(existingVerification._id)
@@ -234,7 +235,7 @@ const resetPasswordRequest = async (req, res) => {
         const resetPasswordToken = jwt.sign(
             { userId: user._id, purpose: "reset-password" },
             process.env.JWT_SECRET,
-            { expiresIn: "15m" }
+            { expiresIn: "1d" }
         )
         await Verification.create({
             userId: user._id,
@@ -242,7 +243,6 @@ const resetPasswordRequest = async (req, res) => {
             expiresAt: new Date(Date.now() + 15 * 60 * 1000)
         })
         const resetPasswordLink = `${process.env.FRONTEND_URL}/reset-password?token=${resetPasswordToken}`
-        // const emailBody = `<p>Click <a href="${resetPasswordLink}">Here</a> to reset your account password </p>`
         const emailBody = `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -299,7 +299,7 @@ const resetPasswordRequest = async (req, res) => {
         }
         res.status(200).json({ message: "Link reset password dikirim ke email anda." })
     } catch (error) {
-        res.status(500).json({ message: "Internal server kacau balau di auth-controller.js => resetPasswordRequest()", error })
+        res.status(500).json({ message: "Internal server kacau balau di auth-controller.js => resetPasswordRequest", error })
     }
 }
 const verifyResetTokenPassword = async (req, res) => {
@@ -338,7 +338,6 @@ const verifyResetTokenPassword = async (req, res) => {
         await Verification.findByIdAndDelete(verification._id)
         res.status(200).json({ message: "Password berhasil di ganti oli" })
     } catch (error) {
-        console.log(error)
         return res.status(500).json({ message: "Internal server rusak parah di auth-controller.js => verifyResetTokenPassword" })
     }
 }

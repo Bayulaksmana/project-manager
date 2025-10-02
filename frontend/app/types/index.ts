@@ -148,6 +148,7 @@ export interface WorkspaceHeaderProps {
         role: "admin" | "member" | "owner" | "viewer"
         joinedAt: Date
     }[]
+    projects: Project[]
     onCreateProject: () => void
     onInviteMember: () => void
 }

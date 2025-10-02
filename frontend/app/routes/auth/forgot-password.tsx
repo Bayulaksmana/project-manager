@@ -38,7 +38,7 @@ const ForgotPassword = () => {
         <div className='min-h-screen flex flex-col items-center justify-center bg-muted/40 p-4'>
             <Card className='max-w-md w-full shadow-md'>
                 <CardHeader className='text-center justify-center items-center'>
-                    {/* <img src="/logo/logo-utama-hitam.png" alt="" width="250" /> */}
+                    <img src="/logo/logo-utama-hitam.png" alt="" width="250" />
                     <CardTitle className='text-4xl font-cabella'>Dega Nion Don</CardTitle>
                     <CardDescription className='text-muted-foreground text-md mt-2 font-semibold'>Forgot Password</CardDescription>
                 </CardHeader>

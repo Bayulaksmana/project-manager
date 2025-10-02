@@ -1,7 +1,7 @@
 import { useAuth } from "@/providers/auth-context"
 import { RandomColors, type HeaderProps, type SidebarNavProps, type Workspace } from "@/types"
 import { Button } from "../ui/button"
-import { BadgeCheck, Bell, CircleCheckIcon, CircleHelpIcon, CircleIcon, FileArchive, FileChartPieIcon, InfoIcon, LayoutDashboard, ListIcon, ListTodo, LogInIcon, LogOut, LucideTabletSmartphone, PlusCircle, Search, Settings2, UserLock, UserRoundCogIcon, Users, WorkflowIcon } from "lucide-react"
+import { BadgeCheck, Bell, CircleCheckIcon, CircleHelpIcon, CircleIcon, FileArchive, FileChartPieIcon, Home, InfoIcon, LayoutDashboard, ListIcon, ListTodo, LogInIcon, LogOut, LucideTabletSmartphone, PlusCircle, Search, Settings2, UserLock, UserRoundCogIcon, Users, WorkflowIcon } from "lucide-react"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuPortal, DropdownMenuSeparator, DropdownMenuShortcut, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuTrigger } from "../ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 import { Link, useLoaderData, useLocation, useNavigate } from "react-router"
@@ -12,8 +12,7 @@ import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMe
 import { WorkspaceAvatar } from "./workspace-component"
 import Image from "../utils/image"
 import { Input } from "../ui/input"
-import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip"
-import { Sheet, SheetContent, SheetFooter, SheetHeader, SheetTitle } from "../ui/sheet"
+import { Sheet, SheetContent, SheetFooter, SheetHeader } from "../ui/sheet"
 import { Separator } from "../ui/separator"
 
 
@@ -21,16 +20,9 @@ const Header = ({ onWorkspaceSelected, selectedWorkspace, onCreateWorkspace }: H
     const { user, logout } = useAuth()
     const navigate = useNavigate()
     const { workspaces } = useLoaderData() as { workspaces: Workspace[] }
-    const isOnWorkspacePage = useLocation().pathname.includes("/workspace");
     const handleOnClick = (workspace: Workspace) => {
         onWorkspaceSelected(workspace);
-        const location = window.location;
-        if (isOnWorkspacePage) {
-            navigate(`/workspaces/${workspace._id}`);
-        } else {
-            const basePath = location.pathname;
-            navigate(`${basePath}?workspaceId=${workspace._id}`);
-        }
+        navigate(`/workspaces/${workspace._id}`);
     };
     return (
         <div className="bg-background sticky top-0 z-40 border-b">
@@ -39,36 +31,26 @@ const Header = ({ onWorkspaceSelected, selectedWorkspace, onCreateWorkspace }: H
                     <DropdownMenuTrigger asChild>
                         <Button variant={"outline"} className="hover:bg-emerald-100" >
                             {selectedWorkspace ?
-                                (<>{
-                                    selectedWorkspace.color && <WorkspaceAvatar color={selectedWorkspace.color} name={selectedWorkspace.name} className="w-6 h-5 rounded" />
-                                }
+                                (<>
+                                    {selectedWorkspace.color && <WorkspaceAvatar color={selectedWorkspace.color} name={selectedWorkspace.name} className="w-6 h-5 rounded" />}
                                     <span className="font-medium">{selectedWorkspace?.name}</span>
-                                </>)
-                                : (
-                                    <span className="font-medium text-xs">Selected Workspace</span>
-                                )}
+                                </>) :
+                                (<span className="font-medium text-xs">Selected Workspace</span>)
+                            }
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
-                        <DropdownMenuLabel className="text-xs">Workspace</DropdownMenuLabel>
+                        <DropdownMenuLabel className="text-xs text-center">Workspace</DropdownMenuLabel>
                         <DropdownMenuSeparator />
                         <DropdownMenuGroup>
                             {workspaces.map((ws) => (
-                                // <DropdownMenuItem key={ws._id} onClick={() => onWorkspaceSelected(ws) }>
                                 <DropdownMenuItem
                                     key={ws._id}
                                     onClick={() => {
                                         handleOnClick(ws)
-                                        // onWorkspaceSelected(ws)
-                                        // if (window.location.pathname) {
-                                        //     navigate(`/dashboard?workspaceId=${ws._id}`);
-                                        // } else {
-                                        //     navigate(`/members?workspaceId=${ws._id}`);
-                                        // }
-                                    }}
-                                >
-                                    {ws.color && (<WorkspaceAvatar color={ws.color} name={ws.name} className="w-6 h-6 rounded flex items-center justify-center" />)}
-                                    <span className="ml-2 text-xs">{ws.name}</span>
+                                    }}>
+                                    {ws.color && (<WorkspaceAvatar color={ws.color} name={ws.name} className="w-7 h-7 font-semibold rounded flex items-center justify-center" />)}
+                                    <span className="ml-2 text-xs font-semibold tracking-wide">{ws.name}</span>
                                 </DropdownMenuItem>
                             ))}
                             <DropdownMenuSeparator />
@@ -96,16 +78,18 @@ const Header = ({ onWorkspaceSelected, selectedWorkspace, onCreateWorkspace }: H
                                 </Avatar>
                             </button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" className="w-fit text-gray-700 font-bold">
-                            <DropdownMenuLabel className="flex items-center gap-2 font-bold">
+                        <DropdownMenuContent align="end" className="w-fit text-gray-700 font-medium gap-2 tracking-wide">
+                            <DropdownMenuLabel className="flex items-center gap-2">
                                 <BadgeCheck className="w-4 h-4 text-gray-500" />
-                                Login as {user?.name}
+                                {user && (<><img src={user.profilePicture} alt="" className="w-4 h-4 rounded-2xl" /></>)}
+                                Login as<span className="font-semibold">{user?.name}</span>
                             </DropdownMenuLabel>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem variant="default"><Link to={"/dashboard"} className="flex items-center gap-2"><LayoutDashboard />Dashboard</Link></DropdownMenuItem>
                             <DropdownMenuItem><Link to={"/profile"} className="flex items-center gap-2"><UserRoundCogIcon />My Profile</Link></DropdownMenuItem>
                             <DropdownMenuItem><Link to={"/setings"} className="flex items-center gap-2"><Settings2 />Setting</Link></DropdownMenuItem>
                             <DropdownMenuSeparator />
+                            <DropdownMenuItem><Link to={"/"} className="flex items-center gap-2"><Home />Homepage</Link></DropdownMenuItem>
                             <DropdownMenuItem variant="destructive" onClick={logout}><LogOut />Logout</DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
@@ -119,6 +103,11 @@ const SidebarComponent = ({ currentWorkspace }: { currentWorkspace: Workspace | 
     const { user, logout } = useAuth()
     const [isCollapsed, setIsCollapsed] = useState(true)
     const navItems = [
+        // {
+        //     title: "Homepage",
+        //     href: "/",
+        //     icon: Home
+        // },
         {
             title: "Dashboard",
             href: "/dashboard",
@@ -162,10 +151,10 @@ const SidebarComponent = ({ currentWorkspace }: { currentWorkspace: Workspace | 
                     {isCollapsed && <img src="/logo/logo-utama-kecil.jpg" className="w-12 block sm:hidden" />}
                 </Link>
                 <Button variant={"link"} className="hover:text-emerald-600 text-gray-700 hidden md:block cursor-pointer" onClick={() => setIsCollapsed(!isCollapsed)}>
-                    {!isCollapsed ? <img src="/logo/logo-utama-hitam.png" className="w-38 -mt-3 mb-4" /> : <img src="/logo/logo-utama-kecil.jpg" className="w-10" />}
+                    {!isCollapsed ? <img src="/logo/logo-utama-hitam.png" className="w-38 mb-4" /> : <img src="/logo/logo-utama-kecil.jpg" className="w-10" />}
                 </Button>
             </div>
-            <ScrollArea className="flex-1 px-3 py-2 mt-4">
+            <ScrollArea className="flex-1 px-3 py-2 mt-4 tracking-wide">
                 <SideNav
                     items={navItems}
                     isCollapsed={isCollapsed}
@@ -187,7 +176,7 @@ const SideNav = ({ items, isCollapsed, className, currentWorkspace, ...props }: 
     const location = useLocation()
     const navigate = useNavigate()
     return (
-        <div className={cn("flex flex-col gap-y-2", className)}{...props}>
+        <div className={cn("flex flex-col", className)}{...props}>
             {items.map((el) => {
                 const Icon = el.icon
                 const isActive = location.pathname === el.href
@@ -216,6 +205,7 @@ const SideNav = ({ items, isCollapsed, className, currentWorkspace, ...props }: 
 }
 
 const NavigationHomepage = () => {
+    const { user } = useAuth()
     const [openSearchBar, setOpenSearchBar] = useState(false)
     const [open, setOpen] = useState(false);
 
@@ -434,31 +424,45 @@ const NavigationHomepage = () => {
                 </button>
             </div>
             <Sheet open={open} onOpenChange={setOpen}>
-                <SheetContent
-                    side={"bottom"}
-                    className="bg-amber-50 p-6 flex flex-col justify-between"
-                >
-                    <SheetHeader>
-                        <SheetTitle className="text-2xl font-cabella -mx-4 -mb-4 italic">KPMIBM-R PC. Bandung</SheetTitle>
+                <SheetContent side={"top"} className="bg-sky-50 px-10 flex flex-col justify-between">
+                    <SheetHeader className="right-1">
+                        <Image src="logo/logo.svg" alt={'logo svg'} w={0} h={0} className={'w-full right-1 flex h-16 object-contain -mb-6'} />
                     </SheetHeader>
                     <Separator />
-                    <div className="relative flex justify-between">
+                    <div className="relative flex justify-between ">
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
                         <Input className="pl-10 w-full" placeholder="Search now ..." />
                     </div>
-                    <div className="flex flex-col gap-4 text-lg font-medium">
+                    <div className="flex flex-col text-sm tracking-wider font-medium">
                         {navLinks.map((link) => (
                             <Link
                                 key={link.to}
                                 to={link.to}
-                                className="hover:bg-emerald-600 transition-colors wfull p-1 rounded text-center hover:text-white"
+                                // className="hover:text-emerald-400 transition-colors wfull p-1 rounded text-center"
+                                className={cn("justify-start hover:bg-emerald-100 text-slate-700", navLinks && "hover:bg-sky-200 text-black p-1")}
                                 onClick={() => setOpen(false)}
                             >
                                 {link.label}
                             </Link>
                         ))}
                     </div>
-                    <SheetFooter className="mt-8 border-t -mb-6 pt-4 text-xs text-center text-gray-600 flex flex-col gap-1">
+                    <div className="">
+                        <Link to={"/dashboard"}>
+                            {user ? (<div className="flex items-center">
+                                <button type="button" title={user.name} className=" w-10 rounded-md flex items-center justify-center bg-none!">
+                                    <img src={user.profilePicture} alt="Login" className='rounded-md w-9 h-6' />
+                                </button>
+                                    <h1 className="">
+                                        <span className="font-semibold italic tracking-wide flex"><BadgeCheck className="w-3 h-3" />{user.name}</span>
+                                    </h1>
+                            </div>) : (<>
+                                <Button type="button" variant={"ghost"} className="flex items-center justify-center hover:bg-emerald-50 w-full">
+                                    <LogInIcon />Login
+                                </Button>
+                            </>)}
+                        </Link>
+                    </div>
+                    <SheetFooter className="mt-8 border-t text-xs text-center text-gray-600 flex flex-col gap-1">
                         <span >Moyokapit © 2025. All rights reserved.</span>
                     </SheetFooter>
                 </SheetContent>

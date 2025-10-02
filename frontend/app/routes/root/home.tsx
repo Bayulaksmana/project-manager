@@ -4,6 +4,7 @@ import Noted from '@/components/utils/title-cilik'
 import { Separator } from '@/components/ui/separator'
 import { Button } from '@/components/ui/button'
 import { Carousel } from '@/components/home/homepage-component'
+import { useAuth } from '@/providers/auth-context'
 
 export function meta({ }: Route.MetaArgs) {
   return [
@@ -12,6 +13,7 @@ export function meta({ }: Route.MetaArgs) {
   ]
 }
 const Homepage = () => {
+  const { user } = useAuth()
   return (
     <div className="flex flex-col md:px-8">
       <Noted title='Home' link='/' page='Landing Page' className='text-emerald-600' />
@@ -35,11 +37,18 @@ const Homepage = () => {
               <textPath href="#circlePath" startOffset="0%">Write your story •</textPath>
             </text>
           </svg>
-          <Button type="button" variant={"ghost"} className="absolute top-0 left-0 right-0 bottom-0 m-auto w-25 h-25 rounded-full flex items-center justify-center hover:bg-emerald-50">
-            <img src="/logo/logo-utama-besar.png" alt="Logo create cerita" className='' />
-          </Button>
+          {user ?
+            <Button type="button" title={user.name} variant={"ghost"} className="absolute top-0 left-0 right-0 bottom-0 m-auto w-25 h-25 rounded-full flex items-center justify-center hover:bg-emerald-50">
+              <img src={user.profilePicture} alt="Logo create cerita" className='rounded-full w-17 h-17' />
+            </Button>
+            :
+            <Button type="button" variant={"ghost"} className="absolute top-0 left-0 right-0 bottom-0 m-auto w-25 h-25 rounded-full flex items-center justify-center hover:bg-emerald-50">
+              <img src="/logo/logo-utama-besar.png" alt="Logo create cerita" className='' />
+            </Button>
+          }
         </Link>
       </div>
+
       <Separator />
       <div className="bg-card shadow-2xl w-full items-center justify-center flex">
         <Carousel />

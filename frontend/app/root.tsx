@@ -34,30 +34,32 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 export default function App() {
   return (
-      <ReactQueryProvider>
-        <Outlet />
-      </ReactQueryProvider>
+    <ReactQueryProvider>
+      <Outlet />
+    </ReactQueryProvider>
   )
 }
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
   let message = "RELOAD PAGE NOW!!";
   let details = "An unexpected error occurred.";
   let stack: string | undefined;
+  let gambar = Layout
 
   if (isRouteErrorResponse(error)) {
     message = error.status === 404 ? "404" : "Error";
-    details =
-      error.status === 404
-        ? "Halaman yang anda cari bermasalah, mending beli truck"
-        : error.statusText || details;
+    details = error.status === 404
+      ? "Halaman yang anda cari bermasalah, mending beli truck"
+      : error.statusText || details;
   } else if (import.meta.env.DEV && error && error instanceof Error) {
     details = error.message;
     stack = error.stack;
   }
 
   return (
-    <main className="pt-16 p-4 container mx-auto">
-      <h1>{message}</h1>
+    <main className="w-full h-screen container flex flex-col items-center justify-center font-bold"
+    >
+      {/* <h1 className="font-bold text-4xl">{message}</h1> */}
+      <img src="/404.png" alt="" className="max-h-[40vw]" />
       <p>{details}</p>
       {stack && (
         <pre className="w-full p-4 overflow-x-auto">

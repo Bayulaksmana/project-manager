@@ -1,12 +1,12 @@
-import { ProjectStatus, RandomColors, type CreateProjectDialogProps, type MemberProps, type Project, type ProjectCardProps, type ProjectListProps } from "@/types"
-import { Link } from "react-router"
+import { ProjectStatus, RandomColors, type CreateProjectDialogProps, type MemberProps, type Project, type ProjectCardProps, type ProjectListProps, type Task } from "@/types"
+import { Link, useParams } from "react-router"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card"
 import { cn } from "@/lib/utils"
 import { Progress } from "../ui/progress"
 import { BookPlusIcon, CalendarDays, LucideCalendarFold } from "lucide-react"
 import { format, formatDistanceToNow } from "date-fns"
 import { id } from "date-fns/locale"
-import { getTaskStatusColor } from "@/lib"
+import { getProject, getProjectProgress, getTaskStatusColor } from "@/lib"
 import { projectSchema } from "@/lib/schema"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -40,12 +40,11 @@ export const ProjectList = ({ workspaceId, projects, onCreateProject }: ProjectL
                         buttonText="Create Project"
                     />
                     : (projects.map((p) => {
-                        const projectProgress = 0
                         return (
                             <ProjectCard
                                 key={p._id}
                                 project={p}
-                                progress={projectProgress}
+                                progress={p.progress}
                                 workspaceId={workspaceId}
                             />)
                     })
@@ -90,10 +89,10 @@ export const ProjectCard = ({ project, progress, workspaceId }: ProjectCardProps
                     </div>
                     <Separator />
                 </div>
-                {!project.members ? 
-                (<></>)
-                :
-                (<></>)
+                {!project.members ?
+                    (<></>)
+                    :
+                    (<></>)
                 }
                 <Link to={`/workspaces/${workspaceId}/projects/${project._id}`}>
                     <div className="-mb-6 -mr-4 text-end">

@@ -1,13 +1,17 @@
 import { RecentProjects, StatisticsCharts, StatsCard, UpcomingTasks } from "@/components/dashboard/dashboard-component";
 import Loading from "@/components/utils/loader";
 import { NoDataFound } from "@/components/utils/no-data-found";
-import { useGetWorkspaceStatsQuery } from "@/hooks/use-workspace";
+import { useGetDashboardSummaryQuery, useGetWorkspaceStatsQuery } from "@/hooks/use-workspace";
 import type { Project, ProjectStatusData, StatsCardProps, Task, TaskPriorityData, TaskTrendsData, WorkspaceProductivityData } from "@/types";
-import { useSearchParams } from "react-router";
+import { useState } from "react";
+import { useNavigate, useSearchParams } from "react-router";
 
 const Dashboard = () => {
     const [searchParams] = useSearchParams();
     const workspaceId = searchParams.get("workspaceId");
+    const navigate = useNavigate()
+    const [dashboardData, setDashboardData] = useState(null)
+    const [maxView, setMaxView] = useState(0)
     if (!workspaceId) {
         return <NoDataFound title='Monitoring dashboard'
             description='Buat ruang kerja terlebih dahulu atau pilih Ruang Kerja'

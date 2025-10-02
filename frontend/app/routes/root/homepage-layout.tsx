@@ -1,6 +1,5 @@
 import { NavigationHomepage } from "@/components/dashboard/navigation-component"
 import { Outlet } from "react-router"
-// import Navbar from "../components/Navbar"
 
 const MainLayout = () => {
 

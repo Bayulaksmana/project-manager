@@ -30,7 +30,7 @@ const ProjectDetails = () => {
                     <h1 className="text-xl text-justify sm:text-2xl font-semibold">{project.title}</h1>
                     <div className="flex items-center gap-2 justify-between">
                         <div className="flex items-center gap-2 w-full">
-                            <span className="text-xs text-muted-foreground">Progress :</span>
+                            <span className="text-xs text-muted-foreground">Progress:</span>
                             <span className="flex-1 w-20 sm:w-xs"><Progress value={projectProgress} className="h-2" /></span>
                             <span className="text-xs text-muted-foreground">{projectProgress}%</span>
                         </div>

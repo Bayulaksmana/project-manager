@@ -1,4 +1,4 @@
-import { postData } from "@/lib/fetch-utils"
+import { postData, postData2 } from "@/lib/fetch-utils"
 import type { SignupFormData } from "@/routes/auth/sign-up"
 import { useMutation } from "@tanstack/react-query"
 
@@ -19,11 +19,23 @@ export const useLoginMutation = () => {
 }
 export const useForgotPasswordMutation = () => {
     return useMutation({
-        mutationFn: (data: { email: string }) => postData("/auth/reset-password-request", data)
+        mutationFn: (data: { email: string }) => postData2("/auth/reset-password-request", data)
     })
 }
 export const useResetTokenPassword = () => {
     return useMutation({
         mutationFn: (data: {token:string, newPassword: string, confirmPassword: string }) => postData("/auth/reset-password", data)
     })
+}
+
+export const uploadImage = async (imageFile: File) => {
+    const formData = new FormData()
+    formData.append("image", imageFile)
+    try {
+        const res = await postData("/auth/upload-image", formData, false)
+        return res
+    } catch (error) {
+        console.error("Error upload the image:", error)
+        throw error
+    }
 }
