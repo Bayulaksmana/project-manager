@@ -17,7 +17,7 @@ const addComment = async (req, res) => {
             gif: gif || null,
             parentComment: parentComment || null,
         })
-        await comment.populate('author', 'name email')
+        await comment.populate('author', 'name email profilePicture')
         await Post.findByIdAndUpdate(postId, { $inc: { comments: 1 } }, { new: true })
         await recordActivity(req.user._id, "created_comment", "Storyspace", comment._id, {
             description: `${comment.author.name} (${comment.author.email}) Comment: ${comment.content}`,

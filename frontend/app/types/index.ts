@@ -10,6 +10,7 @@ export interface User {
     isEmailVerified: boolean,
     updateAt: Date,
     profilePicture?: string,
+    role: "admin" | "member" | "owner" | "viewer",
 }
 
 export interface Workspace {
@@ -44,11 +45,18 @@ export interface Carousel {
 export interface Storyspace {
     _id: string,
     user: User
+    author: User
     title: string,
     desc?: string,
-    img: string,
+    imgUrl: string,
     owner: User | string,
     slug: string,
+    tags: string[],
+    isDratf: boolean,
+    views: number,
+    likes: number,
+    comments: number,
+    isDeeleted: boolean,
     members: {
         user: User,
         role: "admin" | "member" | "owner" | "viewer"
@@ -158,30 +166,30 @@ export interface CreateWorkspaceProps {
     setIsCreatingWorkspace: (isCreatingWorkspace: boolean) => void
 }
 
-// export const RandomColors = [
-//     "bg-red-500",
-//     "bg-green-500",
-//     "bg-blue-500",
-//     "bg-yellow-500",
-//     "bg-purple-500",
-//     "bg-pink-500",
-//     "bg-indigo-500",
-//     "bg-amber-500",
-//     "bg-emerald-500",
-// ];
 export const RandomColors = [
     // Merah
-    "bg-red-500", "bg-rose-500", "bg-pink-500", "bg-fuchsia-500",
-    // Oranye & Amber
-    "bg-orange-500", "bg-amber-500", "bg-yellow-500",
-    // Hijau
-    "bg-lime-500", "bg-green-500", "bg-emerald-500", "bg-teal-500",
-    // Biru
-    "bg-cyan-500", "bg-sky-500", "bg-blue-500", "bg-indigo-500",
-    // Ungu
-    "bg-violet-500", "bg-purple-500",
-    // Netral
-    "bg-stone-500", "bg-neutral-500", "bg-zinc-500", "bg-gray-500", "bg-slate-500",
+    // Emerald & Green shades
+    "#10B981", "#34D399", "#6EE7B7", "#A7F3D0", "#064E3B",
+    // Blue shades
+    "#3B82F6", "#2563EB", "#1D4ED8", "#60A5FA", "#93C5FD",
+    // Indigo & Purple shades
+    "#6366F1", "#4F46E5", "#4338CA", "#818CF8", "#A5B4FC",
+    "#8B5CF6", "#7C3AED", "#6D28D9", "#C4B5FD", "#DDD6FE",
+    // Red shades
+    "#EF4444", "#DC2626", "#B91C1C", "#F87171", "#FCA5A5",
+    // Orange & Amber shades
+    "#F97316", "#EA580C", "#C2410C", "#FDBA74", "#FED7AA",
+    "#F59E0B", "#D97706", "#B45309", "#FCD34D", "#FDE68A",
+    // Yellow shades
+    "#EAB308", "#CA8A04", "#A16207", "#FACC15", "#FEF08A",
+    // Pink & Rose shades
+    "#EC4899", "#DB2777", "#BE185D", "#F472B6", "#FDA4AF",
+    "#F43F5E", "#E11D48", "#9F1239", "#FB7185", "#FDA4AF",
+    // Gray / Neutral shades
+    "#6B7280", "#4B5563", "#374151", "#9CA3AF", "#D1D5DB", "#E5E7EB",
+    // Cyan & Teal
+    "#06B6D4", "#0891B2", "#155E75", "#67E8F9", "#A5F3FC",
+    "#14B8A6", "#0D9488", "#115E59", "#5EEAD4", "#99F6E4",
 ]
 
 export const colorOptions = [
@@ -201,7 +209,6 @@ export interface TaskColumnProps {
     onTaskClick: (taskId: string) => void
     isFullWidth?: boolean
 }
-
 
 export interface CreateTaskDialogProps {
     open: boolean
@@ -284,6 +291,7 @@ export interface ActivityLog {
 export interface Comment {
     _id: string,
     author: User,
+    post: Storyspace,
     text: string,
     createdAt: Date,
     reaction?: CommentReaction[],
@@ -299,6 +307,7 @@ export interface CommentReaction {
     emoji: string,
     user: User,
 }
+
 
 export interface StatsCardProps {
     totalProjects: number;
@@ -349,3 +358,63 @@ export interface InviteMemberDialogProps {
 }
 
 export const ROLES = ["admin", "member", "viewer"] as const;
+
+
+export interface DashboardStats {
+    totalPosts: number;
+    drafts: number;
+    published: number;
+    views: number;
+    likes: number;
+    totalComments: number;
+    aiGenerated: number;
+    totalUsers: number;
+}
+
+export interface TrendingPost {
+    _id: string;
+    title: string;
+    imgUrl?: string;
+    views: number;
+    likes: number;
+}
+
+export interface RecentComment {
+    _id: string;
+    post: {
+        title: string;
+        imgUrl?: string;
+    };
+    author: {
+        username: string;
+        profilePicture?: string;
+    };
+    createdAt: string;
+}
+
+export interface UserSummary {
+    _id: string;
+    name: string;
+    profilePicture?: string;
+    email: string;
+    role: string;
+    isEmailVerified: boolean;
+    createdAt: string;
+}
+
+export interface TagUsage {
+    tag: string;
+    count: number;
+}
+
+export interface DashboardResponse {
+    stats: DashboardStats;
+    trendingPosts: Storyspace[];
+    recentComments: Comment[];
+    user: User[];
+    tagUsage: Storyspace[];
+}
+
+
+
+

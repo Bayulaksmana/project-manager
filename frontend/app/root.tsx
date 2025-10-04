@@ -43,7 +43,6 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
   let message = "RELOAD PAGE NOW!!";
   let details = "An unexpected error occurred.";
   let stack: string | undefined;
-  let gambar = Layout
 
   if (isRouteErrorResponse(error)) {
     message = error.status === 404 ? "404" : "Error";
@@ -58,7 +57,6 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
   return (
     <main className="w-full h-screen container flex flex-col items-center justify-center font-bold"
     >
-      {/* <h1 className="font-bold text-4xl">{message}</h1> */}
       <img src="/404.png" alt="" className="max-h-[40vw]" />
       <p>{details}</p>
       {stack && (

@@ -20,8 +20,15 @@ const getDashboardSummary = async (req, res) => {
         ])
         const views = totalViewsAgg[0]?.total || 0
         const likes = totalLikesAgg[0]?.total || 0
-        const trendingPosts = await Post.find({ isDraft: false, isDeleted: false }).select('title imgUrl views likes').sort({ views: -1, likes: -1 }).limit(5)
-        const recentComments = await CommnentPost.find().populate('post', 'title imgUrl').populate('author', 'username profilePicture').sort({ createdAt: -1 }).limit(5)
+        const trendingPosts = await Post.find({ isDraft: false, isDeleted: false }).select('title imgUrl views likes createdAt').populate('author', 'name email profilePicture').sort({ views: -1, likes: -1 }).limit(5)
+        const recentComments = await CommnentPost.find().populate({
+            path: "post",
+            select: "title imgUrl author",
+            populate: {
+                path: "author",
+                select: "name email profilePicture"
+            }
+        }).populate('author', 'name email profilePicture').sort({ createdAt: -1 }).limit(5)
         const user = await User.find().sort({ createdAt: -1 }).limit(5).select('name profilePicture email role isEmailVerified createdAt')
         const tagUsage = await Post.aggregate([
             { $unwind: "$tags" },
@@ -29,7 +36,7 @@ const getDashboardSummary = async (req, res) => {
             { $project: { tag: "$_id", count: 1, _id: 0 } },
             { $sort: { count: -1 } },
         ])
-        res.json({stats:{totalPosts, drafts, published, views, likes, totalComments, aiGenerated, totalUsers}, trendingPosts, recentComments, user, tagUsage})
+        res.json({ stats: { totalPosts, drafts, published, views, likes, totalComments, aiGenerated, totalUsers }, trendingPosts, recentComments, user, tagUsage })
     } catch (error) {
         console.log(error)
         res.status(500).json({ message: 'Terjadi baku pukul di serer -> dashboard.js' })

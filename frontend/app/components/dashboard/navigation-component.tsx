@@ -1,8 +1,8 @@
 import { useAuth } from "@/providers/auth-context"
 import { RandomColors, type HeaderProps, type SidebarNavProps, type Workspace } from "@/types"
 import { Button } from "../ui/button"
-import { BadgeCheck, Bell, CircleCheckIcon, CircleHelpIcon, CircleIcon, FileArchive, FileChartPieIcon, Home, InfoIcon, LayoutDashboard, ListIcon, ListTodo, LogInIcon, LogOut, LucideTabletSmartphone, PlusCircle, Search, Settings2, UserLock, UserRoundCogIcon, Users, WorkflowIcon } from "lucide-react"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuPortal, DropdownMenuSeparator, DropdownMenuShortcut, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuTrigger } from "../ui/dropdown-menu"
+import { BadgeCheck, Bell, FileArchive, FileChartPieIcon, Home, InfoIcon, LayoutDashboard, ListIcon, ListTodo, LogInIcon, LogOut, LucideFileBox, LucideTabletSmartphone, PlusCircle, Search, Settings2, UserLock, UserRoundCogIcon, Users, WorkflowIcon } from "lucide-react"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuPortal, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 import { Link, useLoaderData, useLocation, useNavigate } from "react-router"
 import React, { useState } from "react"
@@ -12,7 +12,7 @@ import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMe
 import { WorkspaceAvatar } from "./workspace-component"
 import Image from "../utils/image"
 import { Input } from "../ui/input"
-import { Sheet, SheetContent, SheetFooter, SheetHeader } from "../ui/sheet"
+import { Sheet, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle } from "../ui/sheet"
 import { Separator } from "../ui/separator"
 
 
@@ -80,9 +80,10 @@ const Header = ({ onWorkspaceSelected, selectedWorkspace, onCreateWorkspace }: H
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end" className="w-fit text-gray-700 font-medium gap-2 tracking-wide">
                             <DropdownMenuLabel className="flex items-center gap-2">
-                                <BadgeCheck className="w-4 h-4 text-gray-500" />
+                                <BadgeCheck className="w-4 h-4 text-gray-500 hover:text-emerald-400" />
                                 {user && (<><img src={user.profilePicture} alt="" className="w-4 h-4 rounded-2xl" /></>)}
-                                Login as<span className="font-semibold">{user?.name}</span>
+                                <h1 className="font-semibold">{user?.name}</h1>
+                                <span className="font-medium text-xs">as {user?.role}</span>
                             </DropdownMenuLabel>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem variant="default"><Link to={"/dashboard"} className="flex items-center gap-2"><LayoutDashboard />Dashboard</Link></DropdownMenuItem>
@@ -119,6 +120,11 @@ const SidebarComponent = ({ currentWorkspace }: { currentWorkspace: Workspace | 
             icon: WorkflowIcon
         },
         {
+            title: "Storyspace",
+            href: "/storyspaces",
+            icon: LucideFileBox
+        },
+        {
             title: "My Tasks",
             href: "/my-tasks",
             icon: ListTodo
@@ -132,11 +138,6 @@ const SidebarComponent = ({ currentWorkspace }: { currentWorkspace: Workspace | 
             title: "Achieved",
             href: "/achieved",
             icon: FileArchive
-        },
-        {
-            title: "Storyspace",
-            href: "/storyspaces",
-            icon: FileChartPieIcon
         },
         {
             title: "Settings",
@@ -426,7 +427,10 @@ const NavigationHomepage = () => {
             <Sheet open={open} onOpenChange={setOpen}>
                 <SheetContent side={"top"} className="bg-sky-50 px-10 flex flex-col justify-between">
                     <SheetHeader className="right-1">
-                        <Image src="logo/logo.svg" alt={'logo svg'} w={0} h={0} className={'w-full right-1 flex h-16 object-contain -mb-6'} />
+                        <SheetTitle></SheetTitle>
+                        <SheetDescription>
+                            <Image src="logo/logo.svg" alt={'logo svg'} w={0} h={0} className={'w-full right-1 flex h-16 object-contain -mb-6'} />
+                        </SheetDescription>
                     </SheetHeader>
                     <Separator />
                     <div className="relative flex justify-between ">
@@ -447,14 +451,14 @@ const NavigationHomepage = () => {
                         ))}
                     </div>
                     <div className="">
-                        <Link to={"/dashboard"}>
+                        <Link to={"/sign-in"} className="w-full flex justify-center items-center">
                             {user ? (<div className="flex items-center">
                                 <button type="button" title={user.name} className=" w-10 rounded-md flex items-center justify-center bg-none!">
                                     <img src={user.profilePicture} alt="Login" className='rounded-md w-9 h-6' />
                                 </button>
-                                    <h1 className="">
-                                        <span className="font-semibold italic tracking-wide flex"><BadgeCheck className="w-3 h-3" />{user.name}</span>
-                                    </h1>
+                                <h1 className="">
+                                    <span className="font-semibold italic tracking-wide flex"><BadgeCheck className="w-3 h-3" />{user.name}</span>
+                                </h1>
                             </div>) : (<>
                                 <Button type="button" variant={"ghost"} className="flex items-center justify-center hover:bg-emerald-50 w-full">
                                     <LogInIcon />Login

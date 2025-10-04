@@ -1,5 +1,6 @@
 import type { WorkspaceForm } from "@/components/dashboard/workspace-component"
 import { fetchData, postData } from "@/lib/fetch-utils"
+import type { DashboardResponse } from "@/types"
 import { useMutation, useQuery } from "@tanstack/react-query"
 
 export const useCreateWorkspace = () => {
@@ -22,14 +23,15 @@ export const useGetWorkspaceQuery = (workspaceId: string) => {
 
 export const useGetWorkspaceStatsQuery = (workspaceId: string) => {
     return useQuery({
+        enabled: !!workspaceId,
         queryKey: ["workspace", workspaceId, "stats"],
         queryFn: async () => fetchData(`/workspaces/${workspaceId}/stats`),
     })
 };
 export const useGetDashboardSummaryQuery = () => {
     return useQuery({
-        queryKey: ["dashboard"],
-        queryFn: async () => fetchData(`/dashboard`),
+        queryKey: ["dashboard", "summary"],
+        queryFn: async () => fetchData<DashboardResponse>(`/dashboard`),
     })
 };
 
