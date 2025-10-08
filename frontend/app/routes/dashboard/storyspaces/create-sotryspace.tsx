@@ -56,16 +56,19 @@ const CreateStoryspace = ({ isEdit }: { isEdit: string }) => {
         setIdeaLoading(true)
         try {
             const aiResponse = await postData("/ai/generate-story", { topics: "Mahasiswa, Totabuan, Manusia, Masyarakat adat bolaang mongondow", }) as any
-            console.log("ini ai response", aiResponse)
-            // const generatedIdeas = aiResponse.data.parsed
-
-            const generatedIdeas = aiResponse?.parsed || [];
+            let generatedIdeas = [];
+            try {
+                generatedIdeas = typeof aiResponse?.parsed === "string"
+                    ? JSON.parse(aiResponse.parsed)
+                    : aiResponse.parsed;
+            } catch (err) {
+                console.error("Gagal parse hasil AI:", err, aiResponse);
+            }
             if (Array.isArray(generatedIdeas) && generatedIdeas.length > 0) {
                 setPostIdeas(generatedIdeas);
             } else {
                 console.warn("AI tidak mengembalikan ide valid:", generatedIdeas);
             }
-            console.log("ini generated", generatedIdeas)
         } catch (error) {
             console.log("Tunggu AI Berak dulu", error)
         } finally {
