@@ -15,10 +15,10 @@ type PostIdea = {
     title: string;
     description: string;
     tags: string[];
-    category:string[];
-    content:string;
-    imgUrl:string;
-    slug:string
+    category: string[];
+    content: string;
+    imgUrl: string;
+    slug: string
 
 };
 

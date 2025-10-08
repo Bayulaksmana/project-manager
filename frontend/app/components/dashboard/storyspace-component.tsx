@@ -40,14 +40,14 @@ export const colorOptions = [
 export type StoryspaceForm = z.infer<typeof storyspaceSchema>
 
 const CreateStoryspace = ({ isCreateStoryspace, setIsCreatingStoryspace, onNext }: CreateStoryspaceProps) => {
-    const form = useForm<StoryspaceForm>({
-        resolver: zodResolver(storyspaceSchema),
-        defaultValues: {
-            title: "",
-            conten: colorOptions[0],
-            description: ""
-        }
-    })
+    // const form = useForm<StoryspaceForm>({
+    //     resolver: zodResolver(storyspaceSchema),
+    //     defaultValues: {
+    //         title: "",
+    //         conten: colorOptions[0],
+    //         description: ""
+    //     }
+    // })
     const [filters, setFilters] = useState({
         type: "",
         category: "",
@@ -56,7 +56,7 @@ const CreateStoryspace = ({ isCreateStoryspace, setIsCreatingStoryspace, onNext 
 
     const handleNext = () => {
         if (!filters.type || !filters.category) {
-            alert("Pilih jenis tulisan dan kategori terlebih dahulu!")
+            toast.warning("Pilih jenis tulisan dan kategori terlebih dahulu!")
             return
         }
         onNext(filters)
@@ -65,20 +65,20 @@ const CreateStoryspace = ({ isCreateStoryspace, setIsCreatingStoryspace, onNext 
 
     const navigate = useNavigate()
     const { mutate, isPending } = useCreateStory()
-    const onSubmit = (data: StoryspaceForm) => {
-        mutate(data, {
-            onSuccess: (data: any) => {
-                form.reset()
-                setIsCreatingStoryspace()
-                toast.success("Ruang kerja berhasil dibuat")
-                navigate(`/workspaces/${data._id}`)
-            }, onError: (error: any) => {
-                const errorMessage = error.response.data.message
-                toast.error(errorMessage)
-                console.log(error)
-            }
-        })
-    }
+    // const onSubmit = (data: StoryspaceForm) => {
+    //     mutate(data, {
+    //         onSuccess: (data: any) => {
+    //             form.reset()
+    //             setIsCreatingStoryspace()
+    //             toast.success("Ruang kerja berhasil dibuat")
+    //             navigate(`/workspaces/${data._id}`)
+    //         }, onError: (error: any) => {
+    //             const errorMessage = error.response.data.message
+    //             toast.error(errorMessage)
+    //             console.log(error)
+    //         }
+    //     })
+    // }
     return (
         <Dialog open={isCreateStoryspace} onOpenChange={setIsCreatingStoryspace}>
             <DialogContent className="max-w-lg">
@@ -381,7 +381,7 @@ const DeleteButton = ({ isPending, handleDelete }: { isPending: boolean; handleD
     return (
         <>
             <button
-                className="hidden md:group-hover:flex items-center gap-1 text-xs text-rose-300 bg-rose-50 px-1.5 py-1 rounded-md text-nowrap border border-rose-100 hover:border-rose-500 hover:text-rose-500 cursor-pointer"
+                className="hidden sm:group-hover:flex items-center gap-1 text-xs text-rose-300 bg-rose-50 px-1.5 py-1 rounded-md text-nowrap border border-rose-100 hover:border-rose-500 hover:text-rose-500 cursor-pointer"
                 onClick={(e) => {
                     e.stopPropagation()
                     setOpen(true)
@@ -487,6 +487,7 @@ const BlogPostIdeaCard: React.FC<IdeaCardProps> = ({ title, description, tags, t
                                 #{tag}
                             </span>
                         ))}
+                        <p className="text-xs hidden sm:block text-muted-foreground absolute right-2 top-1">Generate @gemini-2.0-flash-lite</p>
                     </div>
                     <h3 onClick={onSelect} className="text-lg font-semibold">{title}</h3>
                     <p className="text-gray-600 text-sm mt-1 text-justify">{description}</p>
