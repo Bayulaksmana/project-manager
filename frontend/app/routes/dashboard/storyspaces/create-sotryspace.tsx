@@ -69,6 +69,7 @@ const CreateStoryspace = ({ isEdit }: { isEdit: string }) => {
             } else {
                 console.warn("AI tidak mengembalikan ide valid:", generatedIdeas);
             }
+            console.log(generatedIdeas)
         } catch (error) {
             console.log("Tunggu AI Berak dulu", error)
         } finally {
