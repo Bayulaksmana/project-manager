@@ -42,6 +42,25 @@ export interface Carousel {
     updateAt: Date,
 }
 
+export interface StoryspaceProps {
+    _id: string;
+    title: string
+    counts: {
+        all: number;
+        published: number;
+        draft: number;
+        deleted: number
+    };
+    page: number;
+    posts: Storyspace[];
+    allCounts: number;
+    totalPages: number;
+    status: "Published" | "Draft" | "Deleted";
+    onClick: (slug: string) => void
+}
+
+export type StoryStatus = "all" | "published" | "draft" | "deleted";
+
 export interface Storyspace {
     _id: string,
     user: User
@@ -52,11 +71,12 @@ export interface Storyspace {
     owner: User | string,
     slug: string,
     tags: string[],
-    isDratf: boolean,
+    status: StoryStatus
+    isDraft: boolean,
     views: number,
     likes: number,
     comments: number,
-    isDeeleted: boolean,
+    isDeleted: boolean,
     members: {
         user: User,
         role: "admin" | "member" | "owner" | "viewer"
@@ -67,9 +87,21 @@ export interface Storyspace {
     isFeatured: boolean,
     visit: number,
     createdAt: Date,
-    updateAt: Date,
+    updatedAt: Date,
 }
-//  Part Enum
+
+export interface PostSummaryProps {
+    postId: string
+    title: string,
+    imgUrl: string,
+    updateOn: React.ReactNode,
+    tags: string[],
+    likes: number,
+    views: number,
+    isDeleted: boolean,
+    onClick?: (e: React.MouseEvent<HTMLDivElement>) => void,
+}
+
 export enum ProjectStatus {
     PLANNING = "Planning",
     IN_PROGRESS = "In Progress",
@@ -209,6 +241,7 @@ export interface TaskColumnProps {
     onTaskClick: (taskId: string) => void
     isFullWidth?: boolean
 }
+
 
 export interface CreateTaskDialogProps {
     open: boolean
@@ -355,6 +388,17 @@ export interface InviteMemberDialogProps {
     isOpen: boolean;
     onOpenChange: (open: boolean) => void;
     workspaceId: string;
+}
+
+export interface DeleteAlertProps {
+    isOpen: boolean;
+    onOpenChange: (open: boolean) => void;
+    postId?: string;
+}
+export interface RestoreAlertProps {
+    isOpen: boolean;
+    onOpenChange: (open: boolean) => void;
+    postId?: string;
 }
 
 export const ROLES = ["admin", "member", "viewer"] as const;

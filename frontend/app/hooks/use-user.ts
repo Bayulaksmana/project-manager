@@ -4,7 +4,6 @@ import type {
     ProfileFormData,
 } from "@/routes/user/profile";
 import { useMutation, useQuery } from "@tanstack/react-query";
-// const queryKey: QueryKey = ["user"];
 
 export const useUserProfileQuery = () => {
     return useQuery({

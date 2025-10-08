@@ -87,7 +87,7 @@ const Dashboard = () => {
                 />
             </div>
             <div className="grid grid-cols-1 md:grid-cols-12 gap-6 my-4 md:my-8">
-                <div className="col-span-12 md:col-span-7 bg-amber-50 rounded-lg shadow-lg border shadow-gray-100 border-gray-200/50">
+                <div className="col-span-12 md:col-span-7 rounded-lg shadow-lg border shadow-gray-100 border-gray-200/50">
                     <div className="flex items-center justify-between">
                         <TagInsight tagUsage={dashboard?.tagUsage || []} />
                     </div>

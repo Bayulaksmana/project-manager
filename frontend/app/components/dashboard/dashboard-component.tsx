@@ -1,7 +1,7 @@
 import { colorOptions, type Comment, type Project, type StatisticsChartsProps, type StatsCardProps, type Task } from "@/types"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../ui/card"
 import { ChartBarBig, ChartLine, ChartPie, CheckCircle2, Circle, ClockArrowUpIcon, LucideDot, LucideHeartHandshake, LucideUserRoundCheck } from "lucide-react"
-import { ChartContainer, ChartLegend, ChartLegendContent, ChartTooltip, ChartTooltipContent } from "../ui/chart"
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from "../ui/chart"
 import { Bar, BarChart, CartesianGrid, Cell, Legend, Line, LineChart, Pie, PieChart, XAxis, YAxis } from "recharts"
 import { Link, useSearchParams } from "react-router"
 import { getProjectProgress, getTaskStatusColor } from "@/lib"
@@ -407,21 +407,21 @@ export const TagInsight = ({ tagUsage }: { tagUsage: any }) => {
     const processedData = (() => {
         if (!tagUsage) return []
         const sorted = [...tagUsage].sort((a: any, b: any) => b.count - a.count)
-        const topFive = sorted.slice(0, 10)
-        const others = sorted.slice(10)
-        const othersCount = others.reduce((sum: number, item: any) => sum + item.count, 0)
+        const topFive = sorted.slice(0, 5)
+        const others = sorted.slice(5)
+        const othersCount = others.reduce((sum: number, item: any) => sum + item.count, 1)
         const finalData = topFive.map((item: any) => ({
             ...item,
             name: item.tag || ""
         }))
-        if (othersCount > 0) {
+        if (othersCount > 1) {
             finalData.push({ name: "Others", count: othersCount, color: "#d1d5db" })
         }
         return finalData
     })()
     return (
-        <div className="grid grid-cols-12 justify-between m-2">
-            <div className="col-span-12 md:col-span-7">
+        <div className="grid grid-cols-12 justify-between gap-2 m-4">
+            <div className="col-span-12 md:col-span-7 items-end ">
                 <CostumPieChart data={processedData} colors={colorOptions} />
             </div>
             <div className="col-span-12 md:col-span-5 mt-5 md:mt-0 ">
@@ -442,12 +442,12 @@ const TagCloud = ({ tags }: { tags: { name: string; count: number; color?: strin
     return (
         <div className="flex flex-wrap gap-2 md:mt-4">
             {tags.map((tag) => {
-                const fontSize = 10 + (tag.count / maxCount) * 5; // Scale font size between 12px and 28px
+                const fontSize = 12 + (tag.count / maxCount) * 5; // Scale font size between 12px and 28px
                 return (
                     <span
                         key={tag.name}
                         style={{ fontSize: `${fontSize}px`, backgroundColor: tag.color }}
-                        className="px-3 font-medium text-emerald-900/80 bg-emerald-100 py-0.5 rounded-lg"
+                        className="px-3 font-medium text-sky-900/80 bg-sky-100 py-0.5 rounded-lg"
                     >
                         #{tag.name.split(" ")
                             .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
@@ -462,7 +462,7 @@ const TagCloud = ({ tags }: { tags: { name: string; count: number; color?: strin
 
 const CostumPieChart = ({ data, colors }: { data: any[], colors: string[] }) => {
     return (
-        <Card className="md:m-4 " >
+        <Card className="bg-sky-50" >
             <CardHeader className="flex flex-row items-center justify-between">
                 <CardTitle className="text-base font-bold">
                     Tags Insight Post
@@ -471,9 +471,9 @@ const CostumPieChart = ({ data, colors }: { data: any[], colors: string[] }) => 
             </CardHeader>
             <CardContent>
                 <ChartContainer
-                    className="w-full h-[200px]"
+                    className="w-full h-[250px] overflow-auto -mt-6"
                     config={{
-                        others: { color: "#d1d5db" },
+                        // others: { color: "#d1d5db" },
                     }}>
                     <PieChart>
                         <Pie
@@ -505,7 +505,7 @@ const CostumPieChart = ({ data, colors }: { data: any[], colors: string[] }) => 
 export const TopPostCard = ({ title, views, likes, imgUrl, maxView, author, created, email }: { title: string; imgUrl: string; views: number; likes: number; maxView: number; author: string, created: string; email: string }) => {
     const viewPercentage = ((views / maxView) * 100).toFixed(0);
     return (
-        <div className="flex flex-col border border-gray-200 bg-emerald-50 p-2 mb-2 shadow-xs rounded-lg">
+        <div className="flex flex-col border border-gray-200 p-2 mb-2 shadow-xs rounded-lg">
             <div className="flex items-center gap-2">
                 <img src={imgUrl} alt={title} className="w-10 h-10 rounded-md object-cover mb-1" />
                 <div className="flex flex-1 items-center justify-between">

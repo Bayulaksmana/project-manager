@@ -1,4 +1,4 @@
-import { postData, postData2 } from "@/lib/fetch-utils"
+import { postData } from "@/lib/fetch-utils"
 import type { SignupFormData } from "@/routes/auth/sign-up"
 import { useMutation } from "@tanstack/react-query"
 
@@ -19,7 +19,7 @@ export const useLoginMutation = () => {
 }
 export const useForgotPasswordMutation = () => {
     return useMutation({
-        mutationFn: (data: { email: string }) => postData2("/auth/reset-password-request", data)
+        mutationFn: (data: { email: string }) => postData("/auth/reset-password-request", data)
     })
 }
 export const useResetTokenPassword = () => {

@@ -1,8 +1,8 @@
 import { useAuth } from "@/providers/auth-context"
 import { RandomColors, type HeaderProps, type SidebarNavProps, type Workspace } from "@/types"
 import { Button } from "../ui/button"
-import { BadgeCheck, Bell, FileArchive, FileChartPieIcon, Home, InfoIcon, LayoutDashboard, ListIcon, ListTodo, LogInIcon, LogOut, LucideFileBox, LucideTabletSmartphone, PlusCircle, Search, Settings2, UserLock, UserRoundCogIcon, Users, WorkflowIcon } from "lucide-react"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuPortal, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu"
+import { BadgeCheck, Bell, FileArchive, Home, InfoIcon, LayoutDashboard, ListIcon, ListTodo, LogInIcon, LogOut, LucideFileBox, LucideTabletSmartphone, PlusCircle, Search, Settings2, UserLock, UserRoundCogIcon, Users, WorkflowIcon } from "lucide-react"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 import { Link, useLoaderData, useLocation, useNavigate } from "react-router"
 import React, { useState } from "react"
@@ -120,7 +120,7 @@ const SidebarComponent = ({ currentWorkspace }: { currentWorkspace: Workspace | 
             icon: WorkflowIcon
         },
         {
-            title: "Storyspace",
+            title: "Storyspaces",
             href: "/storyspaces",
             icon: LucideFileBox
         },
@@ -135,7 +135,7 @@ const SidebarComponent = ({ currentWorkspace }: { currentWorkspace: Workspace | 
             icon: Users
         },
         {
-            title: "Achieved",
+            title: "Achieveds",
             href: "/achieved",
             icon: FileArchive
         },
@@ -194,7 +194,7 @@ const SideNav = ({ items, isCollapsed, className, currentWorkspace, ...props }: 
                     key={el.href}
                     title={el.title}
                     variant={isActive ? "outline" : "ghost"}
-                    className={cn("justify-start hover:bg-emerald-100 text-slate-700", isActive && "bg-emerald-300 hover:bg-emerald-200 text-black font-semibold")}
+                    className={cn("justify-start hover:bg-emerald-100 text-slate-700", isActive && "bg-emerald-300 hover:bg-emerald-200 text-black font-medium")}
                     onClick={handleClick}
                 >
                     <Icon className={isCollapsed ? "" : "mr-2 sm:mx-2"} />

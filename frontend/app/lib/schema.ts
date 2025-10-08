@@ -65,6 +65,9 @@ export const inviteMemberSchema = z.object({
     email: z.email(),
     role: z.enum(["admin", "member", "viewer"]),
 });
+export const deleteSchema = z.object({
+    isDeleted: z.boolean(),
+});
 
 export const changePasswordSchema = z.object({
     currentPassword: z

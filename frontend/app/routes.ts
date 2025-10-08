@@ -20,7 +20,8 @@ export default [
         route("workspaces/:workspaceId/projects/:projectId", "routes/dashboard/project/index.tsx"),
         route("workspaces/:workspaceId/projects/:projectId/tasks/:taskId", "routes/dashboard/task/index.tsx"),
         route("members", "routes/dashboard/members/index.tsx"),
-        route("/profile", "routes/user/profile.tsx")
+        route("/profile", "routes/user/profile.tsx"),
+        route("/create", "routes/dashboard/storyspaces/create-sotryspace.tsx")
     ]),
 
     route("workspace-invite/:workspaceId", "routes/dashboard/workspaces/workspace-invite.tsx"),
