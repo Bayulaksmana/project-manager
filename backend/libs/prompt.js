@@ -1,27 +1,45 @@
-const generateStoryPrompt = (topic) => `generate a short story about ${topic}
+// const generateStoryPrompt = (topic) => `generate a short story about ${topic}
 
-For each sentence in the story, provide a relevant image description in Indonesian language.
-- Judul harus bernilai positif, humanis dan berkebudayaan (minimal 10 kata dari topik yang diajukan)
-- Deskripsi maksimal 200 kata dengan isi yang mencerminkan topik secara detail, dengan muatan nilai Culture dan Positif di Dunia modern
-- gaya bahasa yang casual, modern, positif word, penuh optimistik
-- 4 Tags yang relevan
-- Content maksimal 500 kata memuat seluruh pandangan dari topik berisi dasein dan da solen
-- berikan gambar dengan ukuran kecil sebagai kesimpulan dari topik
+// For each sentence in the story, provide a relevant image description in Indonesian language.
+// - Judul harus bernilai positif, humanis dan berkebudayaan (minimal 10 kata dari topik yang diajukan)
+// - Deskripsi maksimal 200 kata dengan isi yang mencerminkan topik secara detail, dengan muatan nilai Culture dan Positif di Dunia modern
+// - gaya bahasa yang casual, modern, positif word, penuh optimistik
+// - 4 Tags yang relevan
+// - Content maksimal 500 kata memuat seluruh pandangan dari topik berisi dasein dan da solen
+// - berikan gambar dengan ukuran kecil sebagai kesimpulan dari topik
 
-Berikan respon dalam format JSON dengan struktur berikut ini:
-[
-    {
-        "title": "",
-        "slug": "",
-        "imgUrl":"",
-        "category": ["", "", ""]
-        "description": "",
-        "content":""
-        "tags": ["", "", "", ""]
-    }
-]
+// Berikan respon dalam format JSON dengan struktur berikut ini:
+// [
+//     {
+//         "title": "",
+//         "slug": "",
+//         "imgUrl":"",
+//         "category": ["", "", ""]
+//         "description": "",
+//         "content":""
+//         "tags": ["", "", "", ""]
+//     }
+// ]
 
-Important: Do Not Add any extra text outside the JSON format. only return valid JSON response.`
+// Important: Do Not Add any extra text outside the JSON format. only return valid JSON response.`
+
+const generateStoryPrompt = (topic) => `
+Kamu adalah AI penulis kreatif. Buat **4 ide cerita pendek** berdasarkan topik berikut: "${topic}"
+
+Setiap ide harus dalam format:
+{
+  "title": "Judul inspiratif minimal 10 kata",
+  "slug": "slug-kebanyakan-kecil-tanpa-spasi",
+  "imgUrl": "URL gambar kecil representatif",
+  "category": ["kategori1", "kategori2", "kategori3"],
+  "description": "Deskripsi maksimal 200 kata, gaya casual, positif, dan penuh optimisme.",
+  "content": "Isi cerita 400–500 kata dengan nilai budaya modern dan refleksi humanis.",
+  "tags": ["tag1", "tag2", "tag3", "tag4"]
+}
+
+Keluarkan output hanya dalam format JSON valid.
+Jangan tambahkan teks lain, jangan gunakan backtick, markdown, atau komentar.
+`;
 
 const generateStoryPostPrompt = (post) => {
     const title = post.title || "Untitled"

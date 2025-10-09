@@ -73,28 +73,26 @@ const getAllPost = async (req, res) => {
         filter = { isDraft: false, isDeleted: false };
     } else if (status === "draft") {
         filter = { isDraft: true, isDeleted: false };
-    } else if (status === "deleted") {
-        filter = { isDeleted: true };
     } else if (status === "all") {
-        // tampilkan semua, tanpa filter
-        filter = {};
-    } else {
-        // default -> hanya yang belum dihapus
-        filter = { isDeleted: false };
+        filter = { isDeleted: false }
+    }else if (status === "deleted"){
+        filter = { isDeleted: true }
     }
     const posts = await Post.find(filter)
         .populate("author", "name email")
         .sort({ updatedAt: -1 })
         .skip(skip)
         .limit(limit);
-    const [totalCount, allCount, publishedCount, draftCount] = await Promise.all([
-        Post.countDocuments({}), // semua
-        Post.countDocuments({ isDraft: false, isDeleted: false }),
-        Post.countDocuments({ isDraft: true, isDeleted: false }),
-        Post.countDocuments({ isDeleted: true })
+    const [allCount, publishedCount, draftCount, deletedCount] = await Promise.all([
+        Post.countDocuments({ isDeleted: false }), // semua yang belum dihapus
+        Post.countDocuments({ isDraft: false, isDeleted: false }), // published
+        Post.countDocuments({ isDraft: true, isDeleted: false }),  // draft
+        Post.countDocuments({ isDeleted: true }) // deleted
     ]);
-
-    res.status(200).json({ posts, page, totalPages: Math.ceil(totalCount / limit), totalCount, counts: { all: totalCount, published: allCount, draft: draftCount } });
+    res.status(200).json({
+        posts, page, totalPages: Math.ceil(allCount / limit), allCount,
+        counts: { all: allCount, published: publishedCount, draft: draftCount, deleted: deletedCount }
+    });
     try {
     } catch (error) {
         return res.status(500).json({ message: 'Lagi kacau di backend -> storyspace.js / controller', error: err.message })
@@ -181,7 +179,6 @@ const restorePost = async (req, res) => {
         if (!post) {
             return res.status(404).json({ message: "Postingan tidak ditemukan" });
         }
-        // restore
         post.isDeleted = false;
         post.deletedAt = null;
         await post.save();

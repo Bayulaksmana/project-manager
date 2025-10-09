@@ -13,7 +13,7 @@ server.set("trust proxy", true);
 server.disable("etag")
 server.use(cors({
     origin: process.env.FRONTEND_URL,
-    methods: ["GET", "POST", "DELETE", "PUT"],
+    methods: ["GET", "POST", "DELETE", "PUT", "PATCH"],
     allowedHeaders: ["Content-Type", "Authorization"],
 }))
 server.use(morgan("dev"))

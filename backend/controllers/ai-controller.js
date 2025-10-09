@@ -65,24 +65,33 @@ const generateStoryPost = async (req, res) => {
         })
         const rawTex = response.text
         const cleanedText = rawTex
-            .replace(/^```json\s*/, "")
-            .replace(/```$/g, "")
-            .replace(/\\n/g, "\n")
-            .replace(/```/g, "")
+            .replace(/```json|```/g, "")   // hapus block markdown
+            .replace(/\r/g, "")            // hapus carriage return
+            .replace(/\u0000/g, "")        // hapus null char
+            .replace(/[\x00-\x09\x0B\x0C\x0E-\x1F\x7F]/g, "") // hapus semua karakter kontrol ASCII
+            .replace(/\u2028|\u2029/g, "") // hapus line separator unicode
             .trim();
         let parsed;
         try {
             parsed = JSON.parse(cleanedText);
-        } catch (e) {
-            console.error("Gagal parse JSON:", e.message);
-            parsed = cleanedText; // fallback biar tetap ada data mentah
+            if (typeof parsed === "string") parsed = JSON.parse(parsed);
+            if (!Array.isArray(parsed)) parsed = [parsed];
+        } catch (error) {
+            console.error("Gagal parse JSON:", error.message);
+            parsed = [{ text: cleanedText }];
         }
         generateCounter.set(userId, count + 1);
-        res.status(200).json({ message: `Generate ${topics} berhasil`, rawTex, parsed, sisaLimit: 2 - (count + 1) })
+        res.status(200).json({ message: `Generate ${topics} berhasil`, parsed, sisaLimit: 2 - (count + 1) })
     } catch (error) {
-        return res.status(500).json({ message: "AI sedang ke mars nyari wangsit -> Controller AI", error: error.message })
+        console.error("🚨 Error di generateStoryPost:", error);
+        return res.status(500).json({
+            message: "AI sedang ke mars nyari wangsit -> Controller AI",
+            error: error.message,
+        })
     }
 }
+
+
 const generateComment = async (req, res) => {
     try {
         const { author, content } = req.body

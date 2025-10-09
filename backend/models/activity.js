@@ -11,6 +11,7 @@ const activityLogSchema = new Schema({
             "created_story",
             "updated_story",
             "deleted_story",
+            "restored_story",
             "created_comment",
             "updated_comment",
             "deleted_comment",
