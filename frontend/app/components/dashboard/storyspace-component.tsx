@@ -86,11 +86,10 @@ const CreateStoryspace = ({ isCreateStoryspace, setIsCreatingStoryspace, onNext 
                     <DialogTitle className="text-xl font-semibold text-slate-800">
                         ✨ Pilih Jenis Tulisan
                     </DialogTitle>
-                    <p className="text-sm text-slate-500">
+                    <DialogDescription>
                         Tentukan jenis tulisan dan kategori sebelum membuat Storyspace baru.
-                    </p>
+                    </DialogDescription>
                 </DialogHeader>
-
                 <div className="space-y-4 mt-2">
                     {/* Jenis Tulisan */}
                     <div>
@@ -474,8 +473,8 @@ export interface IdeaCardProps {
 }
 const BlogPostIdeaCard: React.FC<IdeaCardProps> = ({ title, description, tags, tone, onSelect, imgUrl, content }) => {
     return (
-        <div className="p-4 border rounded-xl cursor-pointer mb-6 shadow-md transition hover:-translate-y-0.5" >
-            <div className="flex flex-col md:flex-row gap-4">
+        <div className="p-4 border rounded-xl cursor-pointer space-y-2 mb-4 shadow-md transition hover:-translate-y-0.5" >
+            <div className="flex flex-col md:flex-row gap-4 mt-4">
                 <img src={imgUrl} alt="Cover" className="object-cover w-14 h-14 border rounded-xl" />
                 <div className="">
                     <div className="flex flex-wrap gap-2">
@@ -489,10 +488,10 @@ const BlogPostIdeaCard: React.FC<IdeaCardProps> = ({ title, description, tags, t
                         ))}
                         <p className="text-xs hidden sm:block text-muted-foreground absolute right-2 top-1">Generate @gemini-2.0-flash-lite</p>
                     </div>
-                    <h3 onClick={onSelect} className="text-lg font-semibold">{title}</h3>
-                    <p className="text-gray-600 text-sm mt-1 text-justify">{description}</p>
                 </div>
             </div>
+            <h3 onClick={onSelect} className="text-lg font-semibold">{title}</h3>
+            <p className="text-gray-600 text-sm mt-1 text-justify">{description}</p>
             <p className="mt-3 text-xs text-gray-500 italic">Tone: {tone}</p>
             <div className="">
                 <p className="text-sm font-medium text-justify">{content}</p>

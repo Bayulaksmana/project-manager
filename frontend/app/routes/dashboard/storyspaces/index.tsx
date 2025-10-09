@@ -28,7 +28,7 @@ const Storyspaces = () => {
             { label: "All", count: counts.all || 0 },
             { label: "Published", count: counts.published || 0 },
             { label: "Draft", count: counts.draft || 0 },
-            { label: "Deleted", count: counts.deleted || 0 },
+            // { label: "Deleted", count: counts.deleted || 0 },
         ];
         setTabs(statusArray);
     }, [response]);
@@ -85,10 +85,10 @@ const Storyspaces = () => {
                         likes={post.likes}
                         views={post.views}
                         isDeleted={post.isDeleted}
-                        onClick={() => navigate(`/dashboard/edit/${post.slug}`)}
+                        onClick={() => navigate(`/dashboard/edit/${post._id}`)}
                     />
                 ))}
-                {page < (totalPages ?? 0) && (
+                {page < (totalPages ?? 1) && !isLoading && (
                     <div className="flex items-center justify-center mt-8">
                         <button
                             className="flex items-center gap-3 text-sm text-white font-medium bg-black px-7 py-1.5 rounded-full text-nowrap hover:scale-105 transition-all cursor-pointer"

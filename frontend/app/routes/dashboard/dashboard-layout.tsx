@@ -16,6 +16,14 @@ export const clientLoader = async () => {
         toast.error("Belahan dunia terbelah dan kamu masih disini?")
     }
 }
+export function HydrateFallback() {
+    return (
+        <div className="flex h-screen items-center justify-center">
+            <span className="text-gray-500 animate-pulse">Loading dashboard...</span>
+        </div>
+    )
+}
+export const hydrateFallback = <HydrateFallback />
 
 const DashboardLayout = () => {
     const { isAuthenticated, isLoading } = useAuth()
