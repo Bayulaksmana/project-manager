@@ -56,6 +56,7 @@ const CreateStoryspace = ({ isEdit }: { isEdit: string }) => {
         setIdeaLoading(true)
         try {
             const aiResponse = await postData("/ai/generate-story", { topics: "Mahasiswa, Totabuan, Manusia, Masyarakat adat bolaang mongondow", }) as any
+            console.log("ini AiResponse", aiResponse)
             let generatedIdeas = [];
             try {
                 generatedIdeas = typeof aiResponse?.parsed === "string"
@@ -83,9 +84,10 @@ const CreateStoryspace = ({ isEdit }: { isEdit: string }) => {
     useEffect(() => {
         if (isEdit) {
             fetchPostSlug()
-        } else {
-            generatePostAI()
         }
+        //  else {
+        //     generatePostAI()
+        // }
         return () => { }
     }, [])
 
@@ -232,7 +234,7 @@ const CreateStoryspace = ({ isEdit }: { isEdit: string }) => {
                                 <span className="text-emerald-600"><LucideSparkles /></span>
                                 Ideas for your next post
                             </h4>
-                            <Button onClick={() => setOpenStory({ open: true, data: null })}
+                            <Button onClick={generatePostAI}
                                 disabled={ideaLoading} className='bg-linear-to-r from-emerald-500 to-green-400 text-sm'>{ideaLoading ? "Generating..." : "Generate Story"}</Button>
                         </div>
                         <div className="mt-6">
