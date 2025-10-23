@@ -271,7 +271,7 @@ const CreateStoryspace = () => {
                             <Separator className='mt-4 mb-4' />
                             <div className="w-full p-2">
                                 <Editor
-                                    // apiKey='ih2jrrv0v85b0hyexn6e0sxrh3bvsf4djnbwrbh4ki2ad4ol'
+                                    apiKey='ih2jrrv0v85b0hyexn6e0sxrh3bvsf4djnbwrbh4ki2ad4ol'
                                     value={postingData.content}
                                     onEditorChange={(data) => handleValueChange("content", data)}
                                     init={{

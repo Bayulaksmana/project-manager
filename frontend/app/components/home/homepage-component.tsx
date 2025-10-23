@@ -21,7 +21,6 @@ const BlogLandingPage = () => {
                     page: pageNumber
                 }
             }) as { posts: any; totalPages: any }
-            console.log(response)
             const { posts, totalPages } = response
             setBlogPostList((prev) => pageNumber === 1 ? posts : [...prev, ...posts])
             setTotalPages(totalPages)
@@ -41,7 +40,7 @@ const BlogLandingPage = () => {
         getAllPost(1)
     }, [])
     const handleClik = (post: any) => {
-        navigate(`/${post.slug}`)
+        navigate(`/storyspace/${post.slug}`)
     }
     return (
         <div className="grid grid-cols-12 gap-5">
