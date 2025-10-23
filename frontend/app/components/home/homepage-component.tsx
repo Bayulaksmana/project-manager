@@ -55,7 +55,7 @@ const BlogLandingPage = () => {
                             ? format(new Date(blogPostList[0].updatedAt), "do, MMM yyyy")
                             : "-"
                         }
-                        authorName={blogPostList[0].author.name}
+                        authorName={blogPostList[0].author.name!}
                         authProfileImg={blogPostList[0].author.profilePicture}
                         onClick={() => handleClik(blogPostList[0])}
                     />
@@ -72,8 +72,8 @@ const BlogLandingPage = () => {
                                 ? format(new Date(item.updatedAt), "do, MMM yyyy")
                                 : "-"
                             }
-                            authorName={item.author.name}
-                            authProfileImg={item.author.profilePicture}
+                            authorName={item.author.name!}
+                            authProfileImg={item.author.profilePicture!}
                             onClick={() => handleClik(item)}
                         />
                     ))}

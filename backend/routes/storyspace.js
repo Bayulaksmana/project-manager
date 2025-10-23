@@ -8,7 +8,7 @@ const adminOnly = (req, res, next) => {
     if(req.user && req.user.role === 'admin') {
         next()
     } else {
-        return res.status(403).json({ message: 'Access denied' })
+        return res.status(403).json({ message: 'Access denied: Silahkan kontak Sekertaris Umum' })
     }
 }
 router.get("/get", getStoryspaces)

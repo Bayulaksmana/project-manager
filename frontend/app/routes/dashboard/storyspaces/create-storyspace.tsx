@@ -86,7 +86,6 @@ const CreateStoryspace = () => {
         try {
             if (postingData.imgUrl && typeof postingData.imgUrl !== "string") {
                 const imgUploadRes = await uploadImage(postingData.imgUrl as File)
-                console.log("Upload image result:", imgUploadRes)
                 imgUrl = (imgUploadRes as any).imgUrl || (imgUploadRes as any).imageUrl || postingData.coverPreview
             } else {
                 imgUrl = postingData.coverPreview
@@ -281,7 +280,7 @@ const CreateStoryspace = () => {
                                             'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
                                         toolbar:
                                             'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
-                                        content_css: 'tinymce-5-dark',
+                                        content_css: 'default',
                                         file_picker_types: 'image',
                                         placeholder: "Tulis cerita atau ide kreatifmu di sini... ✍️",
                                         file_picker_callback: (cb: (url: string, meta?: { title?: string }) => void, value: string, meta: { filetype: string }
@@ -363,7 +362,7 @@ const CreateStoryspace = () => {
                                         comments.map((com) => (
                                             <CommentInfoCard
                                                 key={com._id}
-                                                comId={com._id!}
+                                                comId={com._id}
                                                 authorName={com.author.name!}
                                                 authorPhoto={com.author.profilePicture!}
                                                 content={com.content}
