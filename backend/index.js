@@ -36,7 +36,11 @@ server.use("/api-v1", routes)
 // error middleware
 server.use((err, req, res, next) => {
     console.log(err.stack)
-    res.status(500).json({ message: "Internal Server Erorr! Pastikan server jalan di VM" })
+    if (err.status === 503) {
+        res.status(503).json({ message: "Model AI sedang sibuk. Silakan coba lagi." });
+    } else {
+        res.status(500).json({ message: "Terjadi kesalahan di server." });
+    }
 })
 // not found middleware
 server.use((req, res) => {

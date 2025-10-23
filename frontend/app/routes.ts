@@ -3,6 +3,8 @@ import { type RouteConfig, index, layout, route } from "@react-router/dev/routes
 export default [
     layout("routes/root/homepage-layout.tsx", [
         index("routes/root/home.tsx"),
+        // route("/:slug", "routes/pages/single-post.tsx"),
+        route("/tag/:tag", "routes/pages/single-post.tsx"),
     ]),
     layout("routes/auth/auth-layout.tsx", [
         route("sign-in", "routes/auth/sign-in.tsx"),
@@ -21,7 +23,7 @@ export default [
         route("workspaces/:workspaceId/projects/:projectId/tasks/:taskId", "routes/dashboard/task/index.tsx"),
         route("members", "routes/dashboard/members/index.tsx"),
         route("/profile", "routes/user/profile.tsx"),
-        route("/create", "routes/dashboard/storyspaces/create-sotryspace.tsx")
+        route("/:mode?/:slug?", "routes/dashboard/storyspaces/create-storyspace.tsx"),
     ]),
 
     route("workspace-invite/:workspaceId", "routes/dashboard/workspaces/workspace-invite.tsx"),

@@ -60,7 +60,7 @@ const updatePost = async (req, res) => {
         }
         return res.status(200).json({ updatedPost, message: 'Postingan berhasil diupdate, Anda keren!' })
     } catch (error) {
-        return res.status(500).json({ message: 'Lagi kacau di backend -> storyspace.js / controller', error: err.message })
+        return res.status(500).json({ message: 'Lagi kacau di backend -> storyspace.js / controller', error: error.message })
     }
 }
 const getAllPost = async (req, res) => {
@@ -75,11 +75,11 @@ const getAllPost = async (req, res) => {
         filter = { isDraft: true, isDeleted: false };
     } else if (status === "all") {
         filter = { isDeleted: false }
-    }else if (status === "deleted"){
+    } else if (status === "deleted") {
         filter = { isDeleted: true }
     }
     const posts = await Post.find(filter)
-        .populate("author", "name email")
+        .populate("author", "name email profilePicture")
         .sort({ updatedAt: -1 })
         .skip(skip)
         .limit(limit);

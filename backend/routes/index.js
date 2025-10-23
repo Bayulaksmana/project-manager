@@ -20,7 +20,7 @@ router.use("/tasks", taskRoutes)
 router.use("/users", userRoutes);
 router.use("/homepage", homeRoutes);
 router.use("/ai", aiRoutes)
-router.use("/comment", commentRoutes)
+router.use("/comments", commentRoutes)
 router.use("/dashboard", dashboardRoutes)
 
 

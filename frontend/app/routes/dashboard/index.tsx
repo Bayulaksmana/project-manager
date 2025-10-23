@@ -5,16 +5,15 @@ import { useAuth } from "@/providers/auth-context";
 import type { Project, ProjectStatusData, StatsCardProps, Task, TaskPriorityData, TaskTrendsData, WorkspaceProductivityData } from "@/types";
 import { format } from "date-fns";
 import { id } from "date-fns/locale";
-import { LucideChartBar, LucideChartLine, LucideFileBadge2, LucideGalleryVerticalEnd, LucideHeartHandshake, LucideMessageSquareDot, LucideUserCircle2, User } from "lucide-react";
+import { LucideChartBar, LucideChartLine, LucideFileBadge2, LucideGalleryVerticalEnd, LucideHeartHandshake, LucideMessageSquareDot, LucideUserCircle2 } from "lucide-react";
 import { useState } from "react";
-import { useNavigate, useSearchParams } from "react-router";
+import { useSearchParams } from "react-router";
 
 const Dashboard = () => {
     const { user } = useAuth();
     const [searchParams] = useSearchParams();
     const workspaceId = searchParams.get("workspaceId");
     const today = new Date()
-    const navigate = useNavigate()
     const [maxView, setMaxView] = useState(0)
     const { data: dashboard } = useGetDashboardSummaryQuery()
     const { data, isPending } = useGetWorkspaceStatsQuery(workspaceId!) as {

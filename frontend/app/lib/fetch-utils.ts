@@ -24,6 +24,13 @@ api.interceptors.response.use(
         if (error.response?.status === 401) {
             window.dispatchEvent(new Event("force-logout"));
         }
+        if (error.response?.status === 401) {
+            const message = error.response?.data?.message
+            if (message === "TokenExpired" || message === "InvalidToken") {
+                localStorage.removeItem("token")
+                window.location.href = "/login"
+            }
+        }
         return Promise.reject(error);
     }
 );
@@ -64,7 +71,7 @@ export const postDataAI = <T>(url: string, data?: any) => {
 export const updateData = <T>(url: string, data: unknown, isJson = true) =>
     request<T>("put", url, data, isJson);
 
-export const fetchData = <T>(url: string) => request<T>("get", url);
+export const fetchData = <T>(url: string, data: any) => request<T>("get", url);
 
 export const deleteData = <T>(url: string) => request<T>("delete", url);
 

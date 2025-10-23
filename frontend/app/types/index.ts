@@ -1,7 +1,7 @@
 import type { LucideIcon } from "lucide-react"
+import type { Dispatch, SetStateAction } from "react";
 
 export interface User {
-    length: number
     _id: string,
     email: string,
     name: string,
@@ -459,6 +459,96 @@ export interface DashboardResponse {
     tagUsage: Storyspace[];
 }
 
+export interface IdeaCardProps {
+    title: string
+    description: string
+    tags: string[]
+    tone: "casual" | "formal" | "informative" | "creative"
+    onSelect: () => void
+    imgUrl: string
+    content: string
+}
+
+export interface CreateStoryspaceProps {
+    isCreateStoryspace: boolean
+    setIsCreatingStoryspace: () => void
+    onNext: (filters: { type: string; category: string; description: string }) => void
+}
 
 
+export const getToastMessageByType = (type: any) => {
+    switch (type) {
+        case "edit":
+            return "🚀 Story berhasil dipublikasikan!"
+        case "draft":
+            return "Story berhasil disimpan sebagai draft!"
+        case "published":
+            return "🚀 Story berhasil dipublikasikan!"
+        default:
+            return "🚀 Story berhasil dipublikasikan!"
+    }
+}
 
+export interface commentProps {
+    comId: string
+    authorName: string
+    authorPhoto: string
+    content: string
+    updateOn: string
+    post: Storyspace
+    replies: CommentIdea[]
+    getAllComments: () => void
+    onDelete: (id: string) => void
+    isSubReply?: CommentIdea | null
+}
+
+export interface CommentIdea {
+    _id: string
+    post: Storyspace
+    author: User
+    content: string
+    parentComment?: CommentIdea | null
+    sticker?: string | null
+    emoji: string[]
+    gif?: string | null
+    createdAt: Date
+    updatedAt: Date
+    replies: CommentIdea[]
+}
+
+export type PostIdea = {
+    _id: string
+    title: string;
+    description: string;
+    tags: string[];
+    category: string[];
+    content: string;
+    imgUrl: string;
+    slug: "";
+    tone: "casual" | "formal" | "informative" | "creative";
+    isDraft: boolean
+    generatedByAI: boolean
+};
+
+export interface replayProps {
+    user: User
+    authorName: Storyspace | string,
+    content: CommentIdea | string,
+    replyText: string,
+    setReplyText: Dispatch<SetStateAction<string>>
+    handleAddReply: () => void,
+    handleCancelReply: () => void
+    disableAutoGen: any,
+    type: string | "reply"
+}
+
+export interface FeatureProps {
+    title: string,
+    img: string,
+    content: string,
+    tags: string[]
+    updateOn: string,
+    authorName: string,
+    authProfileImg: string | undefined,
+    onClick: () => void
+}

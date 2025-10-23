@@ -19,7 +19,9 @@ import { Separator } from "../ui/separator"
 const Header = ({ onWorkspaceSelected, selectedWorkspace, onCreateWorkspace }: HeaderProps) => {
     const { user, logout } = useAuth()
     const navigate = useNavigate()
-    const { workspaces } = useLoaderData() as { workspaces: Workspace[] }
+    // const { workspaces } = useLoaderData() as { workspaces: Workspace[] }
+    const data = useLoaderData() as { workspaces?: Workspace[] } | undefined;
+    const workspaces = data?.workspaces ?? [];
     const handleOnClick = (workspace: Workspace) => {
         onWorkspaceSelected(workspace);
         navigate(`/workspaces/${workspace._id}`);

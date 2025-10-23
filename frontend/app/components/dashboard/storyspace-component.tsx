@@ -1,59 +1,29 @@
 import { storyspaceSchema } from "@/lib/schema"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
 import type z from "zod"
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "../ui/dialog"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form"
 import { Input } from "../ui/input"
 import { Textarea } from "../ui/textarea"
-import { cn } from "@/lib/utils"
 import { Button } from "../ui/button"
 import { toast } from "sonner"
-import { useNavigate } from "react-router"
-import { useCreateStory, useDeletePostMutation, useRestorePostMutation } from "@/hooks/use-storypace"
+import { useDeletePostMutation, useRestorePostMutation } from "@/hooks/use-storypace"
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card"
-import { format } from "date-fns"
+import { format, formatDistanceToNow } from "date-fns"
 import { id } from "date-fns/locale"
-import { BookOpenCheckIcon, CalendarClock, LoaderIcon, LucideFileImage, LucideHeartHandshake, LucideLoaderCircle, LucideTimer, LucideTrash, LucideTrash2, LucideUserCheck2 } from "lucide-react"
-import type { Storyspace, StoryStatus, PostSummaryProps } from "@/types"
-import Loading from "../utils/loader"
-import { useRef, useState } from "react"
+import { BookOpenCheckIcon, CalendarClock, LoaderIcon, LucideDot, LucideFileImage, LucideGaugeCircle, LucideHeartHandshake, LucideLoader2, LucideLoaderCircle, LucideMessageSquareDot, LucideMessageSquarePlus, LucideMessageSquareReply, LucideMessageSquareShare, LucideMessageSquareX, LucideReply, LucideSend, LucideTimer, LucideTrash, LucideTrash2, LucideUserCheck2, LucideWand, LucideWandSparkles } from "lucide-react"
+import type { Storyspace, StoryStatus, PostSummaryProps, IdeaCardProps, CreateStoryspaceProps, commentProps, replayProps } from "@/types"
+import { useEffect, useRef, useState } from "react"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select"
-
-interface CreateStoryspaceProps {
-    isCreateStoryspace: boolean
-    setIsCreatingStoryspace: () => void
-    onNext: (filters: { type: string; category: string; description: string }) => void
-}
-
-export const colorOptions = [
-    "#FF5733",
-    "#33C1FF",
-    "#28A745",
-    "#FFC300",
-    "#8E44AD",
-    "#E67E22",
-    "#2ECC71",
-    "#34495E",
-]
+import { useNavigate } from "react-router"
+import { postData } from "@/lib/fetch-utils"
+import { useAuth } from "@/providers/auth-context"
 
 export type StoryspaceForm = z.infer<typeof storyspaceSchema>
-
 const CreateStoryspace = ({ isCreateStoryspace, setIsCreatingStoryspace, onNext }: CreateStoryspaceProps) => {
-    // const form = useForm<StoryspaceForm>({
-    //     resolver: zodResolver(storyspaceSchema),
-    //     defaultValues: {
-    //         title: "",
-    //         conten: colorOptions[0],
-    //         description: ""
-    //     }
-    // })
     const [filters, setFilters] = useState({
         type: "",
         category: "",
         description: "",
     })
-
     const handleNext = () => {
         if (!filters.type || !filters.category) {
             toast.warning("Pilih jenis tulisan dan kategori terlebih dahulu!")
@@ -62,23 +32,6 @@ const CreateStoryspace = ({ isCreateStoryspace, setIsCreatingStoryspace, onNext 
         onNext(filters)
         setIsCreatingStoryspace()
     }
-
-    const navigate = useNavigate()
-    const { mutate, isPending } = useCreateStory()
-    // const onSubmit = (data: StoryspaceForm) => {
-    //     mutate(data, {
-    //         onSuccess: (data: any) => {
-    //             form.reset()
-    //             setIsCreatingStoryspace()
-    //             toast.success("Ruang kerja berhasil dibuat")
-    //             navigate(`/workspaces/${data._id}`)
-    //         }, onError: (error: any) => {
-    //             const errorMessage = error.response.data.message
-    //             toast.error(errorMessage)
-    //             console.log(error)
-    //         }
-    //     })
-    // }
     return (
         <Dialog open={isCreateStoryspace} onOpenChange={setIsCreatingStoryspace}>
             <DialogContent className="max-w-lg">
@@ -153,7 +106,7 @@ const CreateStoryspace = ({ isCreateStoryspace, setIsCreatingStoryspace, onNext 
     )
 }
 
-const TagInput = ({ tags, setTags }: { tags: string[], setTags: React.Dispatch<React.SetStateAction<string[]>> }) => {
+const TagInput = ({ tags, setTags }: { tags: string[], setTags: (tags: string[]) => void }) => {
     const [input, setInput] = useState('')
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -196,7 +149,7 @@ const TagInput = ({ tags, setTags }: { tags: string[], setTags: React.Dispatch<R
     )
 }
 
-const CoverImageSelector = ({ image, setImage, preview, setPreview }: { image: string, setImage: (value: string) => void, preview: string, setPreview: (value: string) => void }) => {
+const CoverImageSelector = ({ image, setImage, preview, setPreview }: { image: string | File, setImage: (value: string) => void, preview: string, setPreview: (value: string) => void }) => {
     const inputRef = useRef<HTMLInputElement>(null)
     const [previewUrl, setPreviewUrl] = useState<string | undefined>(undefined)
     const handleChangeImage = (event: any) => {
@@ -225,8 +178,8 @@ const CoverImageSelector = ({ image, setImage, preview, setPreview }: { image: s
             <Input type="file" accept="image/*" ref={inputRef} onChange={handleChangeImage} className="hidden"
             />
             {!image && !preview ? (
-                <div className="w-full h-56 flex flex-col items-center justify-center gap-2 bg-gray-50/50 rounded-md border border-dashed border-gray-300 cursor-pointer relative" onClick={onChooseFile}>
-                    <div className="w-14 h-14 flex items-center justify-center bg-emerald-50 rounded-full">
+                <div className="w-full h-56 flex flex-col items-center justify-center gap-2 bg-gray-100/50 rounded-md border border-dashed border-gray-300 cursor-pointer relative" onClick={onChooseFile}>
+                    <div className="w-14 h-14 flex items-center justify-center bg-emerald-100 rounded-full">
                         <LucideFileImage className="text-xl text-emerald-700" />
                     </div>
                     <p className="text-sm text-muted-foreground">Click to upload a cover image</p>
@@ -312,7 +265,7 @@ const StoryPostSummaryCard = ({ title, imgUrl, updateOn, tags, likes, views, isD
             {
                 onSuccess: (data: any) => {
                     const message = data?.message
-                    toast.info(message)
+                    toast.success(message)
                 }, onError: (error: any) => {
                     const message = error?.response?.data?.message
                     toast.warning(message)
@@ -321,14 +274,13 @@ const StoryPostSummaryCard = ({ title, imgUrl, updateOn, tags, likes, views, isD
         )
     }
     const handleDelete = () => {
-        onDelete(postId,
-            {
-                onSuccess: () => {
-                    toast.info("Post berhasil dilempar ke TPU")
-                }, onError: (error: any) => {
-                    toast.warning("Gagal melemparkan post ke TPU.", error)
-                }
+        onDelete(postId, {
+            onSuccess: () => {
+                toast.success("Post berhasil dilempar ke TPU")
+            }, onError: (error: any) => {
+                toast.warning("Gagal melemparkan post ke TPU.", error)
             }
+        }
         )
     }
     return (
@@ -355,6 +307,8 @@ const StoryPostSummaryCard = ({ title, imgUrl, updateOn, tags, likes, views, isD
             </div>
             {!isDeleted
                 ? <DeleteButton
+                    className={"hidden bg-rose-100 sm:group-hover:flex items-center gap-1 text-xs hover:bg-rose-50 text-rose-300 hover:text-rose-500 hover:border-rose-500 border hover:bg-linear-to-r hover:from-rose-100 hover:to-rose-300"}
+                    title={`Hapus Cerita - ${title}`}
                     isPending={isPending}
                     handleDelete={handleDelete} />
                 : <button
@@ -371,7 +325,7 @@ const StoryPostSummaryCard = ({ title, imgUrl, updateOn, tags, likes, views, isD
     )
 }
 
-const DeleteButton = ({ isPending, handleDelete }: { isPending: boolean; handleDelete: () => void }) => {
+const DeleteButton = ({ isPending, handleDelete, className, title }: { isPending: boolean; handleDelete: () => void; className: string; title: string }) => {
     const [open, setOpen] = useState(false)
     const confirmDelete = () => {
         handleDelete()
@@ -379,31 +333,28 @@ const DeleteButton = ({ isPending, handleDelete }: { isPending: boolean; handleD
     }
     return (
         <>
-            <button
-                className="hidden sm:group-hover:flex items-center gap-1 text-xs text-rose-300 bg-rose-50 px-1.5 py-1 rounded-md text-nowrap border border-rose-100 hover:border-rose-500 hover:text-rose-500 cursor-pointer"
-                onClick={(e) => {
-                    e.stopPropagation()
-                    setOpen(true)
-                }}
+            <Button
+                className={className}
+                onClick={(e) => { e.stopPropagation(); setOpen(true) }}
+                variant={"ghost"}
+                size={"sm"}
                 disabled={isPending}
                 title="Delete Post"
             >
                 {isPending ? (
                     <LucideLoaderCircle className="animate-spin text-[15px]" />
                 ) : (
-                    <LucideTrash2 className="size-4 hidden md:block" />
+                    <LucideTrash2 className="size-4" />
                 )}
-            </button>
+            </Button>
             <Dialog open={open} onOpenChange={setOpen}>
                 <DialogContent className="sm:max-w-[400px]">
                     <DialogHeader>
-                        <DialogTitle>Hapus Postingan</DialogTitle>
+                        <DialogTitle>{title}</DialogTitle>
                     </DialogHeader>
                     <DialogDescription>
-                        <p className="text-sm text-slate-600">
-                            Apakah kamu yakin ingin menghapus postingan ini?
-                            Tindakan ini tidak dapat dibatalkan.
-                        </p>
+                        Apakah kamu yakin ingin menghapus postingan ini?
+                        Tindakan ini tidak dapat dibatalkan.
                     </DialogDescription>
                     <DialogFooter className="flex justify-end gap-2 mt-4">
                         <Button variant="outline" onClick={() => setOpen(false)}>
@@ -412,7 +363,7 @@ const DeleteButton = ({ isPending, handleDelete }: { isPending: boolean; handleD
                         <Button
                             onClick={confirmDelete}
                             disabled={isPending}
-                            className="bg-rose-500 hover:bg-rose-600 text-white"
+                            className="bg-linear-to-r from-rose-100 to-rose-300 hover: text-black hover:bg-linear-to-r hover:from-rose-300 hover:to-rose-600 border hover:border-rose-500 hover:text-rose-950"
                         >
                             {isPending ? (
                                 <LucideLoaderCircle className="animate-spin size-4" />
@@ -432,7 +383,7 @@ const SkeletonLoader = () => {
         <>
             <div
                 role="status"
-                className="w-full max-w-sm p-4 border border-gray-200 rounded-xl shadow animate-pulse md:p-6"
+                className="w-full max-w-sm p-4 border border-gray-200 rounded-xl shadow animate-pulse"
             >
                 <div className="flex items-center justify-center h-48 mb-4 bg-gray-300 rounded">
                     <LoaderIcon className="animate-spin text-muted-foreground" />
@@ -462,18 +413,9 @@ const SkeletonLoader = () => {
     )
 }
 
-export interface IdeaCardProps {
-    title: string
-    description: string
-    tags: string[]
-    tone: "casual" | "formal" | "informative" | "creative"
-    onSelect: () => void
-    imgUrl: string
-    content: string
-}
-const BlogPostIdeaCard: React.FC<IdeaCardProps> = ({ title, description, tags, tone, onSelect, imgUrl, content }) => {
+const BlogPostIdeaCard = ({ title, description, tags, tone, onSelect, imgUrl, content }: IdeaCardProps) => {
     return (
-        <div className="p-4 border rounded-xl cursor-pointer space-y-2 mb-4 shadow-md transition hover:-translate-y-0.5" >
+        <div className="p-4 border rounded-xl space-y-2 mb-4 shadow-md transition hover:-translate-y-0.5" >
             <div className="flex flex-col md:flex-row gap-4 mt-4">
                 <img src={imgUrl} alt="Cover" className="object-cover w-14 h-14 border rounded-xl" />
                 <div className="">
@@ -490,9 +432,9 @@ const BlogPostIdeaCard: React.FC<IdeaCardProps> = ({ title, description, tags, t
                     </div>
                 </div>
             </div>
-            <h3 onClick={onSelect} className="text-lg font-semibold">{title}</h3>
-            <p className="text-gray-600 text-sm mt-1 text-justify">{description}</p>
+            <h3 onClick={onSelect} className="text-lg font-semibold cursor-pointer">{title}</h3>
             <p className="mt-3 text-xs text-gray-500 italic">Tone: {tone}</p>
+            <p className="text-gray-600 text-sm mt-1 text-justify">{description}</p>
             <div className="">
                 <p className="text-sm font-medium text-justify">{content}</p>
             </div>
@@ -500,4 +442,247 @@ const BlogPostIdeaCard: React.FC<IdeaCardProps> = ({ title, description, tags, t
     )
 }
 
-export { CreateStoryspace, StoryspaceCard, TabsCostum, StoryPostSummaryCard, CoverImageSelector, TagInput, SkeletonLoader, BlogPostIdeaCard }
+const GenerateStoryForm = ({ contentParams, setPostContent, handleCloseForm }: { contentParams: any, setPostContent: any, handleCloseForm: () => void }) => {
+    const [formData, setFormData] = useState({
+        title: contentParams?.title || "",
+        tone: contentParams?.tone || ""
+    })
+    const [isLoading, setIsLoading] = useState(false)
+    const [error, setError] = useState<string | null>(null)
+    const navigate = useNavigate()
+    const handleChange = (key: any, value: any) => {
+        setFormData((prevData) => ({
+            ...prevData,
+            [key]: value,
+        }))
+    }
+    const handleGenerateBlogSpot = async (e: any) => {
+        e.preventDefault()
+        const { title, tone } = formData
+        if (!title || !tone) {
+            toast.error('Isi form data terlebih dahulu.')
+            return
+        }
+        setError("")
+        setIsLoading(true)
+        try {
+            const aiResponse = await postData("/ai/generate", { title, tone }) as {
+                message: string;
+                parsed: string;
+                sisaLimit: number;
+            };
+            if (aiResponse) {
+                toast.success(aiResponse.message)
+            }
+            const generatePost = aiResponse.parsed
+            setPostContent(title, generatePost || "")
+            handleCloseForm()
+        } catch (error: any) {
+            if (error.response && error.response.data.message) {
+                setError(error.response.data.message)
+            } else {
+                setError("Ada kesalahan diserver, silahkan refresh page")
+            }
+        } finally {
+            // toast.success("Generate post successfully.")
+            setIsLoading(false)
+        }
+    }
+    return (
+        <form onSubmit={handleGenerateBlogSpot} className="space-y-4">
+            <label className="text-sm font-medium text-gray-700">Judul Story</label>
+            <Input
+                value={formData.title}
+                onChange={({ target }) => handleChange("title", target.value)}
+                placeholder="Try to consistence and diciplince"
+                type="text"
+            />
+            <label className="text-sm font-medium text-gray-700">Tema Story</label>
+            <Input
+                value={formData.tone}
+                onChange={({ target }) => handleChange("tone", target.value)}
+                placeholder="Beginner Friendly, technical, futuristic modern light"
+                type="text"
+            />
+            {error && <p className="">{error}</p>}
+            <Button type="submit" className="bg-linear-to-r from-amber-100 to-amber-300 text-black hover:bg-linear-to-r hover:from-amber-200 hover:to-amber-500 hover:border hover:border-amber-700 hover:text-amber-800" disabled={isLoading} variant={"ghost"} size={"sm"}>
+                {isLoading && <LucideLoader2 className="animate-spin" />}
+                {isLoading ? "Generating..." : <span className="flex gap-2 items-center"><LucideGaugeCircle />Generate</span>}
+            </Button>
+        </form>
+    )
+}
+
+const CommentInfoCard = ({ comId, authorName, authorPhoto, content, updateOn, post, replies, getAllComments, onDelete, isSubReply }: commentProps) => {
+    const { user } = useAuth()
+    const [replyText, setReplyText] = useState<string>("")
+    const [loading, setLoading] = useState(false)
+    const [showReplyFrom, setShowReplyFrom] = useState(false)
+    const [showSubReplies, setShowSubReplies] = useState(false)
+    const handleCancelReply = () => {
+        setReplyText("")
+        setShowReplyFrom(false)
+    }
+    const handleAddReply = async () => {
+        try {
+            const response = await postData(`/comments/${post._id}`, {
+                content: replyText,
+                parentComment: comId,
+            }) as { message: string };
+            const msg = response.message;
+            toast.success(msg);
+            setReplyText("")
+            setShowReplyFrom(false)
+            getAllComments()
+        } catch (error: any) {
+            const msg = error.message
+            toast.error(msg)
+        }
+    }
+    return (
+        <div className={`bg-white px-2 rounded-lg group ${isSubReply ? 'mb-1' : 'mb-4'}`}>
+            <div className="grid grid-cols-12 gap-2">
+                <div className="col-span-12 order-2">
+                    <div className="flex items-start gap-3">
+                        <img src={authorPhoto} alt={authorName} className="w-10 h-10 rounded-full" />
+                        <div className="flex-1">
+                            <div className="flex items-center gap-1">
+                                <h3 className="text-[12px] text-muted-foreground font-medium">@{authorName}</h3>
+                                <LucideDot />
+                                <span className="text-[12px] text-muted-foreground font-medium">
+                                    {updateOn}
+                                </span>
+                            </div>
+                            <p className="text-sm text-black font-medium">{content}</p>
+                            <div className="flex items-center justify-end  mt-1.5">
+                                <DeleteButton
+                                    className='hidden sm:group-hover:flex text-rose-500 hover:bg-rose-500 hover:text-white rounded-full'
+                                    title={`Hapus Komentar ${authorName}`}
+                                    isPending={loading}
+                                    handleDelete={() => onDelete(comId)}
+                                />
+                                {!isSubReply && (
+                                    <>
+                                        <Button size={"sm"} variant={"ghost"} className="flex rounded-full text-green-500 hover:bg-emerald-300 hover:text-white" onClick={() => setShowReplyFrom((prev) => !prev)}><LucideMessageSquareReply className="h-7 w-7" /></Button>
+                                        <Button size={"sm"} variant={"ghost"} className="flex text-xs rounded-full text-blue-500  hover:bg-sky-500 hover:text-white" onClick={() => setShowSubReplies((prev) => !prev)}>
+                                            {showSubReplies ? < LucideMessageSquareShare className="h-5 w-5" /> : <LucideMessageSquareDot className="h-5 w-5" />}
+                                            <span className="text-xs">
+                                                {replies.length || 0}
+                                                {replies?.length == 1 ? "" : ""}
+                                            </span>
+                                        </Button>
+                                    </>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {!isSubReply && (
+                    <div className="col-span-12 order-1 flex gap-2 items-start justify-end">
+                        <img src={post.imgUrl} alt={post.imgUrl} className="w-16 h-10 rounded-lg object-cover" />
+                        <div className="flex-1">
+                            <div className="flex items-center">
+                                <h4 className="text-sm font-medium">{post?.title}</h4>
+                            </div>
+                        </div>
+                    </div>
+                )}
+            </div>
+            {!isSubReply && showReplyFrom && (
+                <CommentReplayInput
+                    user={user!}
+                    authorName={authorName}
+                    content={content}
+                    replyText={replyText}
+                    setReplyText={setReplyText}
+                    handleAddReply={handleAddReply}
+                    handleCancelReply={handleCancelReply}
+                    disableAutoGen={false}
+                    type="reply"
+                />
+            )}
+            {showSubReplies &&
+                replies?.length > 0 &&
+                replies.map((com, index) => (
+                    <div key={com._id} className={`ml-5${index == 0 ? "mt-5" : ""}`}>
+                        <CommentInfoCard
+                            key={com._id}
+                            comId={com._id || ""}
+                            authorName={com.author.name || ""}
+                            authorPhoto={com.author.profilePicture || ""}
+                            content={com.content}
+                            updateOn={
+                                com.updatedAt
+                                    ? formatDistanceToNow(new Date(com.updatedAt), { addSuffix: true })
+                                    : "-"
+                            }
+                            post={com.post}
+                            replies={com.replies}
+                            getAllComments={getAllComments}
+                            onDelete={() => onDelete(com._id)}
+                            isSubReply={com.parentComment}
+                        />
+                    </div>
+                ))
+            }
+        </div>
+    )
+}
+
+const CommentReplayInput = ({ user, authorName, content, replyText, setReplyText, handleAddReply, handleCancelReply, disableAutoGen, type = "reply" }: replayProps) => {
+    const [loading, setLoading] = useState(false)
+    const generateReplay = async () => {
+        setLoading(true)
+        try {
+            const aiResponse = await postData(`/ai/generate-reply`, { author: { name: authorName }, content }) as { message: string, reply: string };
+            const msg = aiResponse.message;
+            setReplyText(aiResponse.reply)
+            toast.success(msg);
+        } catch (error: any) {
+            const message = error.message
+            toast.warning(message)
+        } finally {
+            setLoading(false)
+        }
+    }
+    return (
+        <div className="ml-10 relative">
+            <div className="flex items-start gap-3">
+                <img src={user?.profilePicture} alt={user?.name} className="w-10 h-10 rounded-full mt-4" />
+                <div className="flex-1">
+                    <label className="text-sm font-medium text-gray-700">
+                        {type === 'new'
+                            ? typeof authorName === 'string'
+                                ? authorName
+                                : authorName.author.name
+                            : `Reply to ${typeof authorName === 'string' ? authorName : authorName.author.name}`}
+                    </label>
+                    <div className="flex gap-2 items-center">
+                        <Input
+                            className="h-8"
+                            value={replyText}
+                            onChange={({ target }) => setReplyText(target.value)}
+                            placeholder={type === "new" ? "Message" : "Add a Reply"}
+                            type="text"
+                        />
+                        {!disableAutoGen && (
+                            <Button size={"sm"} variant={"outline"} className="hover:bg-linear-to-r hover:from-purple-300 hover:to-rose-400 hover:text-black text-lime-700" disabled={loading} onClick={generateReplay}>
+                                {loading ? (<LucideLoader2 className="animate-spin" />) : (<LucideWand className="" />)}
+                                {/* {loading ? "Generating..." : "Generate Reply"} */}
+                            </Button>
+                        )}
+                    </div>
+                    <div className="flex items-center justify-end gap-1 mt-2 text-xs">
+                        <Button size={"sm"} variant={"ghost"} className="text-xs hover:bg-linear-to-r hover:from-rose-300 hover:to-rose-400 hover:rose-lime-700 text-rose-600" disabled={replyText?.length == 0 || loading} onClick={handleCancelReply}><LucideMessageSquareX />Cancel</Button>
+                        <Button size={"sm"} variant={"ghost"} className="text-xs hover:bg-linear-to-r hover:from-lime-300 hover:to-emerald-400 hover:text-emerald-700 text-emerald-600" disabled={replyText?.length == 0 || loading} onClick={handleAddReply}>
+                            {type == 'new' ? <LucideSend className="" /> : <LucideMessageSquarePlus className="" />}
+                            {type == 'new' ? 'Add' : "Reply"}
+                        </Button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
+}
+
+export { CreateStoryspace, StoryspaceCard, TabsCostum, StoryPostSummaryCard, CoverImageSelector, TagInput, SkeletonLoader, BlogPostIdeaCard, GenerateStoryForm, DeleteButton, CommentInfoCard }

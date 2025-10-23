@@ -36,8 +36,13 @@ export const workspaceSchema = z.object({
 })
 export const storyspaceSchema = z.object({
     title: z.string().min(3, "Nama harus 3 karakter minimal loh yaa.."),
-    conten: z.string().min(3, "Warna minimal 3 karakter loh yaa.."),
-    description: z.string().optional(),
+    content: z.string().min(3, "Warna minimal 3 karakter loh yaa.."),
+    imgUrl: z.instanceof(File).refine((file) => file.size > 0, {
+        message: "Gambar wajib diunggah"
+    }),
+    tags: z.array(z.string()).min(1, "Minimal 3 tag diperlukan"),
+    isDraft: z.boolean(),
+    generatedByAI: z.boolean(),
 })
 export const projectSchema = z.object({
     title: z.string().min(3, "Judul mestinya 3 karakter yah.."),
@@ -59,7 +64,7 @@ export const createTaskSchema = z.object({
     status: z.enum(["To Do", "In Progress", "Done"]),
     priority: z.enum(["Low", "Medium", "High"]),
     dueDate: z.string().min(10, "Pilih tanggal deathline"),
-    assignees : z.array(z.string()).min(1, "Tugas perlu di tambahkan")
+    assignees: z.array(z.string()).min(1, "Tugas perlu di tambahkan")
 })
 export const inviteMemberSchema = z.object({
     email: z.email(),

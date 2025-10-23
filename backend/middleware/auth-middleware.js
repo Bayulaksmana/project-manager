@@ -15,8 +15,10 @@ const authMiddleware = async (req, res, next) => {
         req.user = user
         next()
     } catch (error) {
-        console.log(error)
-        res.status(500).json({ message: "Terjadi kerusakan backend -> auth-middleware" })
+        if (error.name === "TokenExpiredError") {
+            return res.status(401).json({ message: "TokenExpired" })
+        }
+        return res.status(401).json({ message: "InvalidToken" })
     }
 }
 

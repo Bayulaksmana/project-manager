@@ -18,31 +18,40 @@ const Storyspaces = () => {
     const [isLoading, setIsLoading] = useState(false)
     const [totalPages, setTotalPages] = useState<number | null>(null)
     const [isCreateStoryspace, setIsCreatingStoryspace] = useState(false)
-    const { data: response } = useGetStoryspaceQuery(filterStatus, page) as { data: StoryspaceProps }
+    // const { data: response } = useGetStoryspaceQuery(filterStatus, page) as { data: StoryspaceProps }
+    const { data: response, isFetching } = useGetStoryspaceQuery(filterStatus, page) as { data: StoryspaceProps; isFetching: boolean };
     useEffect(() => {
         if (!response) return
         const { posts, totalPages, counts } = response;
-        setTotalPages(totalPages ?? 1);
-        setStoryList(posts);
+        setStoryList((prev) => {
+            if (page === 1) { return posts; } const merged = [...prev, ...posts];
+            return merged.filter((v, i, a) => a.findIndex((t) => t._id === v._id) === i);
+        });
+        setTotalPages(totalPages);
         const statusArray = [
             { label: "All", count: counts.all || 0 },
             { label: "Published", count: counts.published || 0 },
             { label: "Draft", count: counts.draft || 0 },
             // { label: "Deleted", count: counts.deleted || 0 },
         ];
-        setTabs(statusArray);
-    }, [response]);
+        setTabs(statusArray)
+    }, [response, page]);
+
     const handleMore = () => {
         if (page < (totalPages ?? 1)) {
             setPage((prev) => prev + 1)
         }
     }
+    useEffect(() => {
+        setPage(1);
+    }, [filterStatus]);
+
     const handleNext = (filters: { type: string; category: string; description: string }) => {
         const params = new URLSearchParams(filters).toString()
-        navigate(`/create?${params}`, { state: filters })
+        navigate(`/create`, { state: filters })
     }
     return (
-        <div className="space-y-6">
+        <div className="space-y-6 pb-10">
             <div className="flex items-center justify-between mt-4 md:mt-0 bg-white">
                 <h2 className="text-3xl font-cabella">Storyspace</h2>
                 <Button
@@ -85,7 +94,7 @@ const Storyspaces = () => {
                         likes={post.likes}
                         views={post.views}
                         isDeleted={post.isDeleted}
-                        onClick={() => navigate(`/dashboard/edit/${post._id}`)}
+                        onClick={() => navigate(`/edit/${post.slug}`)}
                     />
                 ))}
                 {page < (totalPages ?? 1) && !isLoading && (

@@ -3,7 +3,7 @@ import type { Route } from '../../+types/root'
 import Noted from '@/components/utils/title-cilik'
 import { Separator } from '@/components/ui/separator'
 import { Button } from '@/components/ui/button'
-import { Carousel } from '@/components/home/homepage-component'
+import { BlogLandingPage } from '@/components/home/homepage-component'
 import { useAuth } from '@/providers/auth-context'
 
 export function meta({ }: Route.MetaArgs) {
@@ -50,8 +50,8 @@ const Homepage = () => {
       </div>
 
       <Separator />
-      <div className="bg-card shadow-2xl w-full items-center justify-center flex">
-        <Carousel />
+      <div className="w-full items-center justify-center flex">
+        <BlogLandingPage />
       </div>
     </div>
   )

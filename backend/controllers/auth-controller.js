@@ -161,7 +161,7 @@ const loginUser = async (req, res) => {
         const token = jwt.sign(
             { userId: user._id, purpose: "login" },
             process.env.JWT_SECRET,
-            { expiresIn: "7d" }
+            { expiresIn: "1d" }
         )
         user.lastLogin = new Date()
         await user.save()

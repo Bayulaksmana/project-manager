@@ -10,7 +10,14 @@ export const useCreateStory = () => {
 export const useGetStoryspaceQuery = (status: string, page: number) => {
     return useQuery({
         queryKey: ["storyspaces", status, page],
-        queryFn: async () => fetchData(`/storyspaces?status=${status}&page=${page}`)
+        queryFn: async () => fetchData(`/storyspaces?status=${status}&page=${page}`, page)
+    })
+}
+export const useGetStoryBySLug = (slug: string) => {
+    return useQuery({
+        enabled: !!slug,
+        queryKey: ["post", "storyspaces", slug],
+        queryFn: async () => fetchData(`/slug/${slug}`, slug)
     })
 }
 

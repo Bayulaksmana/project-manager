@@ -24,39 +24,36 @@
 // Important: Do Not Add any extra text outside the JSON format. only return valid JSON response.`
 
 const generateStoryPrompt = (topic) => `
-Kamu adalah AI penulis kreatif. Buat **4 ide cerita pendek** berdasarkan topik berikut: "${topic}"
+Kamu adalah AI penulis kreatif. Buatkan saya **3 ide cerita singkat** berdasarkan topik berikut: "${topic}"
 
 Setiap ide harus dalam format:
 {
-  "title": "Judul inspiratif minimal 10 kata",
-  "slug": "slug-kebanyakan-kecil-tanpa-spasi",
-  "imgUrl": "URL gambar kecil representatif",
-  "category": ["kategori1", "kategori2", "kategori3"],
-  "description": "Deskripsi maksimal 200 kata, gaya casual, positif, dan penuh optimisme.",
-  "content": "Isi cerita 400–500 kata dengan nilai budaya modern dan refleksi humanis.",
-  "tags": ["tag1", "tag2", "tag3", "tag4"]
+  "title": "Judul sangat hegemonic minimal 10 kata",
+  "imgUrl": "URL gambar kecil yang representatif dengan topik",
+  "description": "1 kutipan dengan nama dari para tokoh dunia, filsuf atau pemikir dunia",
+  "content": "Berisi 100-200 kata sesuai topik, buat menarik dengan kedalaman pikiran, analisis saintifik dengan sudut pandang yang modern serta futuristik",
+  "tags": ["tag1", "tag2", "tag3", "tag4"],
+  "tone": [""]
 }
 
 Keluarkan output hanya dalam format JSON valid.
 Jangan tambahkan teks lain, jangan gunakan backtick, markdown, atau komentar.
 `;
 
-const generateStoryPostPrompt = (post) => {
-    const title = post.title || "Untitled"
-    const content = post.content || "This is a new post!"
-    return `Create a social media post based on the following details:
-- Title: ${title}
-- Content: ${content}
-The post should be engaging and concise, suitable for platforms like Instagram or Facebook. Include 3 relevant hashtags and suggest an image description in Indonesian language that complements the post content.
+const generateStoryPostPrompt = (title, tone) => {
+    return `
+AI Kreatif, berikan saya contentnya saja yang berjudul "${title}" dan nuansa tulisan yang "${tone}".
+content memiliki pengantar ciamik, penuh kematangan analisa dan isi tulisan yang kuat serta gaya penulisan serta bahasa yang enak dibaca
 
-Return the response in JSON format with the following structure: `}
+Keluarkan output hanya dalam format JSON valid.
+Jangan tambahkan teks lain, jangan gunakan backtick, markdown, atau komentar. 
+`}
 
 const generateCommentPrompt = (comment) => {
-    const authorName = comment.authorName || "User"
-    const content = comment.content || "This is a new post!"
-    return `Write a comment as ${authorName} for the following post content: "${content}". The comment should be engaging and relevant to the post. Limit the comment to 20 words.`
+    const authorName = comment.author.name
+    const content = comment.content
+    return `Ai hebat berikan komentar dengan ${authorName} yang disesuaikan dengan isi: "${content}". The comment should be engaging and relevant to the post. Limit the comment to 20 words.`
 }
-
 const generateSummaryPrompt = (content) => (
     `You are an AI assistant. Provide a concise summary of the following content in Indonesian language, capturing the main points and essence of the text.
 

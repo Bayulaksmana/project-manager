@@ -24,16 +24,16 @@ export const useForgotPasswordMutation = () => {
 }
 export const useResetTokenPassword = () => {
     return useMutation({
-        mutationFn: (data: {token:string, newPassword: string, confirmPassword: string }) => postData("/auth/reset-password", data)
+        mutationFn: (data: { token: string, newPassword: string, confirmPassword: string }) => postData("/auth/reset-password", data)
     })
 }
 
-export const uploadImage = async (imageFile: File) => {
+export const uploadImage = async (imageFile: File): Promise<{ imageUrl: string }> => {
     const formData = new FormData()
     formData.append("image", imageFile)
     try {
         const res = await postData("/auth/upload-image", formData, false)
-        return res
+        return res as { imageUrl: string }
     } catch (error) {
         console.error("Error upload the image:", error)
         throw error
