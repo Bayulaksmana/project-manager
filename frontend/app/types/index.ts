@@ -4,12 +4,12 @@ import type { Dispatch, SetStateAction } from "react";
 export interface User {
     _id: string,
     email: string,
-    name?: string,
+    name: string,
     username: string,
     createdAt: Date,
     isEmailVerified: boolean,
     updateAt: Date,
-    profilePicture?: string,
+    profilePicture: string,
     role: "admin" | "member" | "owner" | "viewer",
 }
 

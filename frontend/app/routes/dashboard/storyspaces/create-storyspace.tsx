@@ -363,8 +363,8 @@ const CreateStoryspace = () => {
                                             <CommentInfoCard
                                                 key={com._id}
                                                 comId={com._id}
-                                                authorName={com.author.name!}
-                                                authorPhoto={com.author.profilePicture!}
+                                                authorName={com.author?.name}
+                                                authorPhoto={com.author?.profilePicture}
                                                 content={com.content}
                                                 updateOn={com.updatedAt
                                                     ? formatDistanceToNow(new Date(com.updatedAt), { addSuffix: true })
