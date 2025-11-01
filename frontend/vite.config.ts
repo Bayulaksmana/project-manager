@@ -11,5 +11,5 @@ export default defineConfig({
   },
   optimizeDeps: {
     exclude: ["rollup"]
-  }
+  },
 });

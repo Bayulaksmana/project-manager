@@ -217,7 +217,11 @@ const CreateStoryspace = () => {
                                     disabled={loading}
                                     onClick={() => handlePublish(true)}
                                 >
-                                    <LucideSave className='' />
+                                    {loading ? (
+                                        <LucideLoader2 className='animate-spin text-[15px]' />
+                                    ) : (
+                                        <LucideSave className='' />
+                                    )}
                                 </Button>
                                 <Button
                                     className='flex text-xs hover:bg-linear-to-r hover:from-emerald-100 hover:to-emerald-400 bg-linear-to-r from-emerald-50 to-emerald-300 hover:text-black text-emerald-900 hover:border-emerald-500 border'
@@ -227,7 +231,7 @@ const CreateStoryspace = () => {
                                     onClick={() => handlePublish(false)}
                                 >
                                     {loading ? (
-                                        <LucideLoader2 className='' />
+                                        <LucideLoader2 className='animate-spin text-[15px]' />
                                     ) : (
                                         <LucideSend className='' />
                                     )}

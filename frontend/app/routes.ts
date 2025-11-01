@@ -3,8 +3,8 @@ import { type RouteConfig, index, layout, route } from "@react-router/dev/routes
 export default [
     layout("routes/root/homepage-layout.tsx", [
         index("routes/root/home.tsx"),
-        route("storyspace/:slug", "routes/pages/single-post.tsx"),
-        // route("/tag/:tag", "routes/pages/single-post.tsx"),
+        route("storyspace/:slug", "routes/pages/single-post-view.tsx"),
+        route("storyspace/tag/:tag", "routes/pages/single-tags-view.tsx"),
     ]),
     layout("routes/auth/auth-layout.tsx", [
         route("sign-in", "routes/auth/sign-in.tsx"),

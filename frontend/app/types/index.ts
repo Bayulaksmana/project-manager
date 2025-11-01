@@ -550,5 +550,15 @@ export interface FeatureProps {
     updateOn: string,
     authorName: string,
     authProfileImg: string | undefined,
+    like: number,
+    comment: number,
+    view: number,
     onClick: () => void
 }
+export interface TrendingProps {
+    title: string,
+    img: string,
+    tags: string[]
+    onClick: () => void
+}
+

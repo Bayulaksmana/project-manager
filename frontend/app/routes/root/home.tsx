@@ -48,9 +48,8 @@ const Homepage = () => {
           }
         </Link>
       </div>
-
       <Separator />
-      <div className="w-full items-center justify-center flex">
+      <div className="w-full items-center justify-center flex pb-10 md:mt-4">
         <BlogLandingPage />
       </div>
     </div>
