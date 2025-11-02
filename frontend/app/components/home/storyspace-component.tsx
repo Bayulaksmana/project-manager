@@ -6,18 +6,12 @@ import remarkGfm from "remark-gfm"
 import rehypeRaw from "rehype-raw"
 // import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 // import oneLight from 'react-syntax-highlighter/dist/esm/styles/prism/one-light.js'
-// import { oneLight } from "react-syntax-highlighter/dist/cjs/styles/prism";
 import { FacebookIcon, FacebookShareButton, FacebookShareCount, LinkedinIcon, LinkedinShareButton, RedditIcon, RedditShareButton, TelegramIcon, TelegramShareButton, ThreadsIcon, ThreadsShareButton, TwitterShareButton, WhatsappIcon, WhatsappShareButton, XIcon } from "react-share"
 import { toast } from "sonner"
 import type { commentProps } from "@/types"
 import { useAuth } from "@/providers/auth-context"
 import { postData } from "@/lib/fetch-utils"
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-const oneLight = require("react-syntax-highlighter/dist/cjs/styles/prism").oneLight;
-import tsx from "react-syntax-highlighter/dist/cjs/languages/prism/tsx"
-import js from "react-syntax-highlighter/dist/cjs/languages/prism/javascript"
-SyntaxHighlighter.registerLanguage("tsx", tsx);
-SyntaxHighlighter.registerLanguage("javascript", js);
+
 
 
 const MarkdownContent = ({ content }: { content: string }) => {
@@ -29,16 +23,16 @@ const MarkdownContent = ({ content }: { content: string }) => {
                     remarkPlugins={[remarkGfm]}
                     rehypePlugins={[rehypeRaw]}
                     components={{
-                        code({ node, className, children, ...props }: any) {
-                            const match = /language-(\w+)/.exec(className || '')
-                            const language = match ? match[1] : ''
-                            const isInline = !className
-                            return !isInline
-                                ? (<CodeBlock
-                                    code={String(children).replace(/\n$/, '')}
-                                    language={language} />)
-                                : (<code className="px-1 py-0.5 bg-sky-50 rounded-md text-sm" {...props}>{children}</code>)
-                        },
+                        // code({ node, className, children, ...props }: any) {
+                        //     const match = /language-(\w+)/.exec(className || '')
+                        //     const language = match ? match[1] : ''
+                        //     const isInline = !className
+                        //     return !isInline
+                        //         ? (<CodeBlock
+                        //             code={String(children).replace(/\n$/, '')}
+                        //             language={language} />)
+                        //         : (<code className="px-1 py-0.5 bg-sky-50 rounded-md text-sm" {...props}>{children}</code>)
+                        // },
                         p({ children }) {
                             return <p className="mb-4 leading-[22px]">{children}</p>
                         },
@@ -112,38 +106,38 @@ const MarkdownContent = ({ content }: { content: string }) => {
     )
 }
 
-const CodeBlock = ({ code, language }: { code: string, language: string }) => {
-    const [copied, setCopied] = useState(false)
-    const copyCode = () => {
-        navigator.clipboard.writeText(code)
-        setCopied(true)
-        setTimeout(() => setCopied(false), 2000)
-    }
-    return (
-        <div className="relative my-6 rounded-lg overflow-hidden bg-gray-50 border border-gray-200">
-            <div className="flex items-center justify-between px-4 py-2 bg-gray-100 border-b border-gray-200">
-                <div className="flex items-center space-x-2">
-                    <LucideCode size={16} className="text-gray-500" />
-                    <span className="text-xs font-semibold text-gray-600 uppercase tracking-wide">{language || 'code'}</span>
-                </div>
-                <Button onClick={copyCode} className="text-gray-500 hover:text-gray-700 focus:outline-none" aria-label="Copy Code">
-                    {copied
-                        ? (<LucideCheckCircle size={16} className="text-emerald-500" />)
-                        : (<LucideCopy size={16} className="" />)
-                    }
-                    {copied && (<span className="absolute -top-8 right-0 bg-black text-white text-xs rounded-md px-2 py-1 opacity-80 group-hover:opacity-100 transition">Copied!</span>)}
-                </Button>
-            </div>
-            <SyntaxHighlighter
-                language={language}
-                style={oneLight}
-                costumStyle={{ fontSize: 12.5, margin: 0, padding: "1rem", background: "transparent" }}
-            >
-                {code}
-            </SyntaxHighlighter>
-        </div>
-    )
-}
+// const CodeBlock = ({ code, language }: { code: string, language: string }) => {
+//     const [copied, setCopied] = useState(false)
+//     const copyCode = () => {
+//         navigator.clipboard.writeText(code)
+//         setCopied(true)
+//         setTimeout(() => setCopied(false), 2000)
+//     }
+//     return (
+//         <div className="relative my-6 rounded-lg overflow-hidden bg-gray-50 border border-gray-200">
+//             <div className="flex items-center justify-between px-4 py-2 bg-gray-100 border-b border-gray-200">
+//                 <div className="flex items-center space-x-2">
+//                     <LucideCode size={16} className="text-gray-500" />
+//                     <span className="text-xs font-semibold text-gray-600 uppercase tracking-wide">{language || 'code'}</span>
+//                 </div>
+//                 <Button onClick={copyCode} className="text-gray-500 hover:text-gray-700 focus:outline-none" aria-label="Copy Code">
+//                     {copied
+//                         ? (<LucideCheckCircle size={16} className="text-emerald-500" />)
+//                         : (<LucideCopy size={16} className="" />)
+//                     }
+//                     {copied && (<span className="absolute -top-8 right-0 bg-black text-white text-xs rounded-md px-2 py-1 opacity-80 group-hover:opacity-100 transition">Copied!</span>)}
+//                 </Button>
+//             </div>
+//             <SyntaxHighlighter
+//                 language={language}
+//                 style={oneLight}
+//                 costumStyle={{ fontSize: 12.5, margin: 0, padding: "1rem", background: "transparent" }}
+//             >
+//                 {code}
+//             </SyntaxHighlighter>
+//         </div>
+//     )
+// }
 
 const SharePost = ({ title }: { title: string }) => {
     const shareUrl = typeof window !== "undefined" ? window.location.href : ""
