@@ -4,13 +4,20 @@ import { Button } from "../ui/button"
 import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
 import rehypeRaw from "rehype-raw"
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
-import oneLight from 'react-syntax-highlighter/dist/esm/styles/prism/one-light.js'
+// import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
+// import oneLight from 'react-syntax-highlighter/dist/esm/styles/prism/one-light.js'
+// import { oneLight } from "react-syntax-highlighter/dist/cjs/styles/prism";
 import { FacebookIcon, FacebookShareButton, FacebookShareCount, LinkedinIcon, LinkedinShareButton, RedditIcon, RedditShareButton, TelegramIcon, TelegramShareButton, ThreadsIcon, ThreadsShareButton, TwitterShareButton, WhatsappIcon, WhatsappShareButton, XIcon } from "react-share"
 import { toast } from "sonner"
 import type { commentProps } from "@/types"
 import { useAuth } from "@/providers/auth-context"
 import { postData } from "@/lib/fetch-utils"
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+const oneLight = require("react-syntax-highlighter/dist/cjs/styles/prism").oneLight;
+import tsx from "react-syntax-highlighter/dist/cjs/languages/prism/tsx"
+import js from "react-syntax-highlighter/dist/cjs/languages/prism/javascript"
+SyntaxHighlighter.registerLanguage("tsx", tsx);
+SyntaxHighlighter.registerLanguage("javascript", js);
 
 
 const MarkdownContent = ({ content }: { content: string }) => {

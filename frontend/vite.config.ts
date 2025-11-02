@@ -7,7 +7,13 @@ import tsconfigPaths from "vite-tsconfig-paths";
 export default defineConfig({
   plugins: [tailwindcss(), reactRouter(), tsconfigPaths()],
   build: {
-    sourcemap: true,
+    sourcemap: false,
+    chunkSizeWarningLimit: 1600
+  },
+  resolve: {
+    alias: {
+      'react-syntax-highlighter/dist/esm': 'react-syntax-highlighter/dist/cjs',
+    },
   },
   optimizeDeps: {
     exclude: ["rollup"]

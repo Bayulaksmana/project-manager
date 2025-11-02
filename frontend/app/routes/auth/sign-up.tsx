@@ -10,7 +10,7 @@ import { useRef, useState } from 'react'
 import { useForm, type SubmitHandler } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router'
 import { toast } from 'sonner'
-import type z from 'zod'
+import { z } from 'zod'
 
 
 export type SignupFormData = z.infer<typeof signUpSchema>

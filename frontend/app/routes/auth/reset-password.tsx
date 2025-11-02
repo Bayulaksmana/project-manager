@@ -10,7 +10,7 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { Link, useSearchParams } from 'react-router'
 import { toast } from 'sonner'
-import z from 'zod'
+import { z } from 'zod'
 
 type ResetPasswordFormData = z.infer<typeof resetPasswordSchema>
 
