@@ -8,7 +8,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { CheckCircle, Loader2, LogInIcon, MailCheckIcon } from 'lucide-react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { Link, useSearchParams } from 'react-router'
+import { Link } from 'react-router'
 import { toast } from 'sonner'
 import { z } from 'zod'
 

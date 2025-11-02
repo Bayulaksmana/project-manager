@@ -1,6 +1,5 @@
 import { CreateStoryspace, StoryPostSummaryCard, TabsCostum } from "@/components/dashboard/storyspace-component"
 import { Button } from "@/components/ui/button"
-import Loading from "@/components/utils/loader"
 import { useGetStoryspaceQuery } from "@/hooks/use-storypace"
 import type { Storyspace, StoryspaceProps, StoryStatus } from "@/types"
 import { format } from "date-fns"

@@ -5,7 +5,7 @@ import { NoDataFound } from '@/components/utils/no-data-found'
 import { useGetWorkspacesQuery } from '@/hooks/use-workspace'
 import type { Workspace } from '@/types'
 import { CopyPlus } from 'lucide-react'
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 const Workspaces = () => {
     const [isCreatingWorkspace, setIsCreatingWorkspace] = useState(false)

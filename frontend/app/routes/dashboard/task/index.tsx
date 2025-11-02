@@ -6,8 +6,8 @@ import Loading from "@/components/utils/loader"
 import { useTaskByIdQuery } from "@/hooks/use-task"
 import { useAuth } from "@/providers/auth-context"
 import type { Project, Task } from "@/types"
-import { format, formatDistanceToNow } from "date-fns"
-import { Archive, ArchiveIcon, ArchiveXIcon, Eye, EyeOff, Trash2 } from "lucide-react"
+import { formatDistanceToNow } from "date-fns"
+import { Archive, ArchiveXIcon, Eye, EyeOff, Trash2 } from "lucide-react"
 import { useNavigate, useParams } from "react-router"
 
 const TaskDetails = () => {

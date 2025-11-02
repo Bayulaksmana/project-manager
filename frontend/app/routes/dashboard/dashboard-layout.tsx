@@ -10,7 +10,7 @@ import { toast } from 'sonner'
 
 export const clientLoader = async () => {
     try {
-        const [workspaces] = await Promise.all([fetchData("/workspaces")])
+        const [workspaces] = await Promise.all([fetchData("/workspaces", {})])
         return { workspaces }
     } catch (error) {
         toast.error("Belahan dunia terbelah dan kamu masih disini?")

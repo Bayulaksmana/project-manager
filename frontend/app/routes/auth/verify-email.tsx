@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useSearchParams } from 'react-router'
 import { CheckCircle, Copyright, Loader, XCircle } from "lucide-react"
 import { Button } from '@/components/ui/button'

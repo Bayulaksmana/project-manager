@@ -22,8 +22,8 @@ import { useGetMyTasksQuery } from "@/hooks/use-task";
 import type { Task } from "@/types";
 import { format } from "date-fns";
 import { id } from "date-fns/locale";
-import { ArrowDown10Icon, ArrowDownNarrowWideIcon, ArrowUp10Icon, ArrowUpRight, BoxIcon, CheckCircle, Clock, FilterIcon } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import { ArrowDown10Icon, ArrowDownNarrowWideIcon, ArrowUp10Icon, ArrowUpRight, BoxIcon, CheckCircle, Clock } from "lucide-react";
+import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router";
 
 const MyTasks = () => {

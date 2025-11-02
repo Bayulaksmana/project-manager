@@ -11,9 +11,9 @@ import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Loading from "@/components/utils/loader";
 import { useGetWorkspaceDetailsQuery } from "@/hooks/use-workspace";
-import type { Task, Workspace } from "@/types";
-import React, { useEffect, useState } from "react";
-import { Link, useSearchParams } from "react-router";
+import type { Workspace } from "@/types";
+import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router";
 
 const Members = () => {
     const [searchParams, setSearchParams] = useSearchParams();
