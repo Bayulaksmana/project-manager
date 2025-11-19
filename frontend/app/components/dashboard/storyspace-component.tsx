@@ -646,7 +646,7 @@ const CommentReplayInput = ({ user, authorName, content, replyText, setReplyText
         }
     }
     return (
-        <div className="ml-10 relative">
+        <div className="ml-6 relative">
             <div className="flex items-start gap-3">
                 <img src={user?.profilePicture} alt={user?.name} className="w-10 h-10 rounded-full mt-4" />
                 <div className="flex-1">
@@ -685,4 +685,4 @@ const CommentReplayInput = ({ user, authorName, content, replyText, setReplyText
     )
 }
 
-export { CreateStoryspace, StoryspaceCard, TabsCostum, StoryPostSummaryCard, CoverImageSelector, TagInput, SkeletonLoader, BlogPostIdeaCard, GenerateStoryForm, DeleteButton, CommentInfoCard }
+export { CreateStoryspace, StoryspaceCard, TabsCostum, StoryPostSummaryCard, CoverImageSelector, TagInput, SkeletonLoader, BlogPostIdeaCard, GenerateStoryForm, DeleteButton, CommentInfoCard, CommentReplayInput }

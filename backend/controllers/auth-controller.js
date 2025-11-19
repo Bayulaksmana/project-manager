@@ -21,9 +21,11 @@ const registerUser = async (req, res) => {
         if (!passwordRegex.test(password)) {
             return res.status(403).json({ message: "Password should be 6 to 20 character long with a numeric, 1 lowercase, 1 uppercase letters" })
         }
-
         const clientIp = req.headers["x-forwarded-for"]?.split(",")[0]?.trim() || req.ip || req.socket?.remoteAddress || "127.0.0.1";
-        const userAgent = req.headers["user-agent"] || "PostmanRuntime/7.45.0";
+        const userAgent = req.headers["user-agent"] || "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Arcjet/1.0";
+        if (!email) {
+            return res.status(400).json({ message: "Email tidak boleh kosong." });
+        }
         const decision = await aj.protect(
             { email },
             { requested: 1 },

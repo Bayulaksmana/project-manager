@@ -1,4 +1,5 @@
 import type { LucideIcon } from "lucide-react"
+import type { N } from "node_modules/vite/dist/node/moduleRunnerTransport.d-DJ_mE5sf";
 import type { Dispatch, SetStateAction } from "react";
 
 export interface User {
@@ -539,7 +540,7 @@ export interface replayProps {
     handleAddReply: () => void,
     handleCancelReply: () => void
     disableAutoGen: any,
-    type: string | "reply"
+    type: string | "reply" | "new"| "edit" | "edit-reply"
 }
 
 export interface FeatureProps {

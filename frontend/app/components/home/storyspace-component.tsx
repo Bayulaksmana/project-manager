@@ -1,4 +1,4 @@
-import { LucideCheckCircle, LucideCode, LucideCopy, LucideCopyCheck } from "lucide-react"
+import { LucideChevronDown, LucideCopy, LucideCopyCheck, LucideDot, LucideMessageCircleReply } from "lucide-react"
 import { useState } from "react"
 import { Button } from "../ui/button"
 import ReactMarkdown from "react-markdown"
@@ -11,6 +11,9 @@ import { toast } from "sonner"
 import type { commentProps } from "@/types"
 import { useAuth } from "@/providers/auth-context"
 import { postData } from "@/lib/fetch-utils"
+import { useNavigate } from "react-router"
+import { formatDistanceToNow } from "date-fns"
+import { CommentReplayInput } from "../dashboard/storyspace-component"
 
 
 
@@ -189,12 +192,12 @@ const SharePost = ({ title }: { title: string }) => {
     )
 }
 
-const CommentInfoCard = ({ comId, authorName, authorPhoto, content, updateOn, post, replies, getAllComments, onDelete }: commentProps) => {
+const CommentInfoCard = ({ comId, authorName, authorPhoto, content, updateOn, post, replies, isSubReply, getAllComments, onDelete }: commentProps) => {
     const { user } = useAuth()
     const [replyText, setReplyText] = useState("")
     const [showReplyFrom, setShowReplayFrom] = useState(false)
     const [showSubReplies, setShowSubReplies] = useState(false)
-
+    const navigate = useNavigate()
     const handleCancelReply = () => {
         setReplyText("")
         setShowReplayFrom(false)
@@ -203,10 +206,10 @@ const CommentInfoCard = ({ comId, authorName, authorPhoto, content, updateOn, po
         try {
             const response = await postData(`/comments/${postId}`, {
                 content: replyText,
-                parentComment: commentId
+                parentComment: ""
             }) as { response: any }
             console.log(response)
-            toast.success("success")
+            toast.success("success menambahkan balasan")
             setReplyText("")
             setShowReplayFrom(false)
             getAllComments()
@@ -215,9 +218,74 @@ const CommentInfoCard = ({ comId, authorName, authorPhoto, content, updateOn, po
             toast.error(msg)
         }
     }
-
     return (
-        <div className="">comment</div>
+        <div className="bg-white p-3 rounded-lg cursor-pointer group mb-2 border border-gray-200 hover:bg-gray-50">
+            <div className="grid grid-cols-12 gap-3">
+                <div className="col-span-12 md:col-span-8 order-2 md:order-1">
+                    <div className="flex items-center gap-3">
+                        <img src={authorPhoto} alt={authorName} className="w-10 h-10 rounded-full" />
+                        <div className="flex-1">
+                            <div className="flex items-center md:gap-1 flex-wrap">
+                                <h3 className="text-[12px] text-gray-500 font-medium">@{authorName}</h3>
+                                <LucideDot className="text-muted-foreground" />
+                                <span className="text-[12px] text-muted-foreground font-medium">{updateOn}</span>
+                            </div>
+                            <p className="text-sm text-black font-medium">{content}</p>
+                            <div className="flex items-center gap-4 mt-2 text-sm text-gray-600 relative">
+                                {!isSubReply && (
+                                    <div className="hidden sm:group-hover:flex lg:absolute lg:-top-10 lg:-right-78 gap-2">
+                                        <Button className="flex items-center gap-2 text-[13px] font-medium text-sky-600 bg-sky-50 px-4 py-0.5 rounded-full hover:bg-sky-500 hover:text-white" onClick={() => {
+                                            if (!user) {
+                                                toast.warning("Login terlebih dahulu")
+                                                navigate("/sign-in")
+                                            } setShowReplayFrom((prev) => !prev)
+                                        }}><LucideMessageCircleReply />Reply</Button>
+                                        <Button className="flex items-center gap-1.5 text-[13px] font-medium text-sky-600 bg-sky-50 px-4 py-0.5 rounded-full hover:bg-sky-500 hover:text-white" onClick={() => setShowSubReplies((prev) => !prev)}>
+                                            {replies?.length || 0} {" "}
+                                            {replies?.length === 1 ? "Reply" : "Replies"}
+                                            <LucideChevronDown className={`${showSubReplies ? "rotate-180" : " "}`} />
+                                        </Button>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {isSubReply && showReplyFrom && (
+                <CommentReplayInput
+                    user={user!}
+                    authorName={authorName}
+                    content={content}
+                    replyText={replyText}
+                    setReplyText={setReplyText}
+                    handleAddReply={() => handleAddReply}
+                    handleCancelReply={handleCancelReply}
+                    disableAutoGen
+                    type="reply"
+                />
+            )}
+            {showSubReplies && replies?.length > 0 && replies.map((comment, index) => (
+                <div className={`ml-5 ${index == 0 ? "mt-5" : ""}`} key={comment._id}>
+                    <CommentInfoCard
+                        comId={comId}
+                        authorName={comment.author.name}
+                        authorPhoto={comment.author.profilePicture}
+                        content={comment.content}
+                        post={post}
+                        replies={comment.replies || []}
+                        isSubReply={comment.parentComment}
+                        updateOn={
+                            comment.updatedAt
+                                ? formatDistanceToNow(new Date(comment.updatedAt), { addSuffix: true })
+                                : "-"
+                        }
+                        getAllComments={() => getAllComments()}
+                        onDelete={() => onDelete(comment._id)}
+                    />
+                </div>
+            ))}
+        </div>
     )
 }
 

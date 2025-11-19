@@ -1,3 +1,4 @@
+import { CommentReplayInput } from '@/components/dashboard/storyspace-component'
 import { TrandingPostSection } from '@/components/home/homepage-component'
 import { CommentInfoCard, MarkdownContent, SharePost } from '@/components/home/storyspace-component'
 import { Button } from '@/components/ui/button'
@@ -18,7 +19,7 @@ const SinglePost = () => {
     const [comments, setComments] = useState<CommentIdea[]>([])
     const { user } = useAuth()
     const [replyText, setReplyText] = useState("")
-    const [showReplyFrom, setShowReplayFrom] = useState(false)
+    const [showReplyFrom, setShowReplyFrom] = useState(false)
     const [openSummarizeDrawer, setOpenSummarizeDrawer] = useState(false)
     const [summaryContent, setSummaryContent] = useState("")
     const [isLoading, setIsLoading] = useState(false)
@@ -62,9 +63,23 @@ const SinglePost = () => {
     }
     const handleCancelReply = () => {
         setReplyText("")
-        setShowReplayFrom(false)
+        setShowReplyFrom(false)
     }
     const handleAddReply = async (postId: any, commentId: any) => {
+        try {
+            const response = await postData(`/comments/${postId}`, {
+                content: replyText,
+                parentComment: commentId,
+            }) as { message: string };
+            const msg = response.message;
+            toast.success(msg);
+            setReplyText("")
+            setShowReplyFrom(false)
+            fetchCommentByPostId(blogPostData?._id)
+        } catch (error: any) {
+            const msg = error.message
+            toast.error(msg)
+        }
     }
     const deleteComment = async (comId: string) => {
         try {
@@ -122,29 +137,29 @@ const SinglePost = () => {
                                 <div className="bg-gray-100 p-4 rounded-lg mb-10">
                                     <div className="flex items-center justify-between">
                                         <h4 className="text-lg font-semibold">Komentar</h4>
-                                        <Button className='flex items-center justify-center gap-3 bg-linear-to-r from-sky-500 to-cyan-400 text-xs font-semibold text-white rounded-full hover:scale-95 hover:text-black'
+                                        <Button className='flex mb-4 items-center justify-center gap-3 bg-linear-to-r from-sky-500 to-cyan-400 text-xs font-semibold text-white rounded-full hover:scale-95 hover:text-black'
                                             onClick={() => {
                                                 if (!user) {
                                                     toast.warning("Login terlebih dahulu")
                                                     navigate("/sign-in")
                                                 }
-                                                setShowReplayFrom(true)
+                                                setShowReplyFrom(true)
                                             }}
                                         >Mari Komen</Button>
                                     </div>
                                     {showReplyFrom && (
-                                        <div className="bg-amber-100 pt-4 pb-5 pr-8 rounded-lg mb-8">
-                                            {/* <CommentReplyInput
-                                                user={user}
-                                                authorName={user?.name}
+                                        <div className="bg-white pt-4 pb-5 pr-8 rounded-lg mb-8">
+                                            <CommentReplayInput
+                                                user={user!}
+                                                authorName={user?.name || ""}
                                                 content={""}
                                                 replyText={replyText}
                                                 setReplyText={setReplyText}
-                                                handleAddReply={handleAddReply}
+                                                handleAddReply={() => handleAddReply(blogPostData._id, "")}
                                                 handleCancelReply={handleCancelReply}
                                                 disableAutoGen
                                                 type="new"
-                                            /> */}
+                                            />
                                         </div>
                                     )}
                                     {comments?.length > 0 &&

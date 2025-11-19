@@ -13,11 +13,13 @@ export const sendEmail = async (to, subject, html) => {
         html
     }
     try {
-        await sgMail.send(msg)
-        console.log("Email verification is succsessfully sent")
-        return true
+        await sgMail.send(msg, {
+            headers: { "User-Agent": "Mosagol-Server/1.0" }
+        });
+        console.log("✅ Email verification sent successfully");
+        return true;
     } catch (error) {
-        console.error("Error sending email verification:", error)
-        return false
+        console.error("❌ Error sending email verification:", error.response?.body || error);
+        return false;
     }
 }

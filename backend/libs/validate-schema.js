@@ -5,6 +5,7 @@ const registerSchema = z.object({
     email: z.string().email("Email anda pasti palsu."),
     password: z.string().min(8, "Password must be at least 8 characters long"),
     profilePicture: z.string().url("Profile picture harus berupa URL yang valid").optional(),
+    adminAccessToken: z.string().optional(),
 })
 const loginSchema = z.object({
     email: z.string().email("Email tidak cocok dengan anda"),

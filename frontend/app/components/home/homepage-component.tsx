@@ -146,9 +146,9 @@ const BlogPostSummaryCard = ({ title, img, content, tags, updateOn, authorName, 
     const navigate = useNavigate()
     return (
         <div className='bg-white shadow-lg shadow-gray-100 rounded-xl overflow-hidden'>
-            <img src={img} alt={title} className='w-full h-64 object-cover' />
+            <img src={img} alt={title} className='w-full h-64 object-cover' onClick={onClick} />
             <div className="md:p-2 group">
-                <h2 className="text-base md:text-lg font-bold mb-2 line-clamp-1 text-justify" onClick={onClick}>{title}</h2>
+                <h2 className="text-base md:text-lg font-bold mb-2 line-clamp-1 text-justify cursor-pointer" onClick={onClick}>{title}</h2>
                 <p className="text-gray-700 text-xs mb-4 line-clamp-5 text-justify ">{content.replace(/<[^>]+>/g, '')}</p>
                 <div className="px-2 pb-2">
                     <div className="flex items-center gap-2 mb-3  justify-between">

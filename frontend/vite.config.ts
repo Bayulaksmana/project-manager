@@ -10,11 +10,6 @@ export default defineConfig({
     sourcemap: false,
     chunkSizeWarningLimit: 1600
   },
-  resolve: {
-    alias: {
-      'react-syntax-highlighter/dist/esm': 'react-syntax-highlighter/dist/cjs',
-    },
-  },
   optimizeDeps: {
     exclude: ["rollup"]
   },
